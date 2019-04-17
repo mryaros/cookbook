@@ -1,4 +1,4 @@
-package org.POJO;
+package org.domains;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,13 +18,7 @@ public class Recipe {
 
     public Recipe(){}
     public Recipe(String name, Category category, ArrayList<Ingredient> ingredients, String description, ArrayList<String> algorithm, Person author){
-        this.name = name;
-        this.category = category;
-        this.ingredients = ingredients;
-        this.description = description;
-        this.algorithm = algorithm;
-        this.author = author;
-        this.rating = 0;
+        this(name, category, ingredients, description, algorithm, author,  -1);
     }
     public Recipe(String name, Category category, ArrayList<Ingredient> ingredients, String description, ArrayList<String> algorithm, Person author, int id){
         this.name = name;
@@ -105,7 +99,4 @@ public class Recipe {
         return id;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
 }

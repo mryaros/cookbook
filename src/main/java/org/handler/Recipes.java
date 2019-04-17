@@ -2,7 +2,7 @@ package org.handler;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.POJO.Recipe;
+import org.domains.Recipe;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

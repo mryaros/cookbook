@@ -1,4 +1,4 @@
-package org.POJO;
+package org.domains;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,10 +13,7 @@ public class Person {
 
     public Person(){}
     public Person(String name, String surname, String login, String password){
-        this.name = name;
-        this.surname = surname;
-        this.login = login;
-        this.password = password;
+        this(name, surname, login, password, -1);
     }
     public Person(String name, String surname, String login, String password, int id){
         this.name = name;
@@ -68,8 +65,5 @@ public class Person {
         return id;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
 
 }

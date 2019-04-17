@@ -1,4 +1,4 @@
-package org.POJO;
+package org.domains;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ public class Category {
 
     public Category(){}
     public Category(String name){
-        this.name = name;
+        this(name, -1);
     }
     public Category(String name, int id){
         this.name = name;
@@ -31,7 +31,4 @@ public class Category {
         return id;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
 }
