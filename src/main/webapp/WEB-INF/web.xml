@@ -10,7 +10,7 @@
 
     <init-param>
       <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>org.hello</param-value>
+      <param-value>org.handler</param-value>
     </init-param>
 
     <init-param>

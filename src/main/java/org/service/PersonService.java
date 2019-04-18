@@ -26,6 +26,16 @@ public class PersonService {
         }
         return false;
     }
+
+    public boolean addPerson(Person person){
+        if(!isExists(person.getLogin(), person.getPassword())){
+            int id = idSingle.addAndGet(1);
+            person.setId(id);
+            persons.put(id, person);
+            return true;
+        }
+        return false;
+    }
     public void deletePerson(int id){
         persons.remove(id);
     }
@@ -45,8 +55,9 @@ public class PersonService {
             personsAll.add(person);
         return personsAll;
     }
-    public void updatePerson(Person person){
-        persons.put(person.getId(), person);
+    public void updatePerson(int id, Person person){
+        person.setId(id);
+        persons.put(id, person);
     }
 
     public boolean isExists(String login, String password){

@@ -14,22 +14,18 @@ import java.util.ArrayList;
  */
 @Api(value = "recipes", description = "Operation with recipesList")
 @Path("/recipes")
-public class Recipes {
+public class RecipesHandler {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get all recipes")
     public ArrayList<Recipe> getRecipes(){return RecipeService.getInstance().getRecipes(); }
 
-    @PUT
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Put new recipe")
-    public String putRecipe(@DefaultValue("")@QueryParam("name") String name,
-                            @DefaultValue("")@QueryParam("category") String category,
-                            @DefaultValue("")@QueryParam("ingredient") ArrayList<String> ingredients,
-                            @DefaultValue("")@QueryParam("description") String description,
-                            @DefaultValue("")@QueryParam("algorithm") ArrayList<String> algorithm,
-                            @DefaultValue("")@QueryParam("login") String login){
-        RecipeService.getInstance().addRecipe(name, category, ingredients, description, algorithm, login);
+    public String postRecipe(Recipe recipe){
+        RecipeService.getInstance().addRecipe(recipe);
         return "Succes";
     }
 
@@ -40,12 +36,28 @@ public class Recipes {
         return RecipeService.getInstance().getRecipeById(id);
     }
 
-    @POST @Path("/id")
+    @POST @Path("/{id}/{like}")
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "Update rating")
-    public String updateRating(@PathParam("id") int id, @QueryParam("like") int like){
-        RecipeService.getInstance().getRecipeById(id).setRating(RecipeService.getInstance().getRecipeById(id).getRating()+like);
+    public String updateRating(@PathParam("id") int id, @PathParam("like") int like){
+        RecipeService.getInstance().updateRating(id, like);
         return "Succes";
+    }
+    @POST @Path("/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update rating")
+    public String updateRecipe(@PathParam("id") int id, Recipe recipe){
+        RecipeService.getInstance().updateRecipe(id, recipe);
+        return "succes";
+    }
+
+    @DELETE @Path("/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(value = "Delete recipe")
+    public String deleteRecipe(@PathParam("id") int id){
+        RecipeService.getInstance().deleteRecipe(id);
+        return "succes";
     }
 
     @GET @Path("/search")
@@ -55,13 +67,7 @@ public class Recipes {
                                     @DefaultValue("")@QueryParam("category") String category,
                                     @DefaultValue("")@QueryParam("ingredient") ArrayList<String> ingredients,
                                     @DefaultValue("")@QueryParam("login") String login){
-        ArrayList<Recipe>  searchRecipe = RecipeService.getInstance().getRecipes();
-        if (!name.equals("")) searchRecipe = RecipeService.getInstance().findByName(searchRecipe, name);
-        if (!category.equals("")) searchRecipe = RecipeService.getInstance().findByCategory(searchRecipe, category);
-        if (ingredients.size()!=0) searchRecipe = RecipeService.getInstance().findByIngredients(searchRecipe, ingredients);
-        if (!login.equals("")) searchRecipe = RecipeService.getInstance().findByAuthor(searchRecipe, login);
-
-        return searchRecipe;
-    }
+        return RecipeService.getInstance().search(name, category, ingredients, login);
+        }
 
 }

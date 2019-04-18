@@ -103,4 +103,5 @@ public class Recipe {
         return id;
     }
 
+    public void setId(int id){this.id = id;}
 }

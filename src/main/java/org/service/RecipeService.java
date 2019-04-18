@@ -36,11 +36,17 @@ public class RecipeService {
 
         recipes.put(id, new Recipe(name, categories.get(addCategory(category)), ingredientArrayList, description, algorithm, PersonService.getInstance().getPerson(login), id));
     }
+    public void addRecipe(Recipe recipe){
+        int id = idSingle.addAndGet(1);
+        recipe.setId(id);
+        recipes.put(id, recipe);
+    }
     public void deleteRecipe(int id){
         recipes.remove(id);
     }
-    public void updateRecipe(Recipe recipe){
-        recipes.put(recipe.getId(), recipe);
+    public void updateRecipe(int id, Recipe recipe){
+        recipe.setId(id);
+        recipes.put(id, recipe);
     }
     public ArrayList<Recipe> getRecipes(){
         ArrayList<Recipe> recipesAll = new ArrayList<Recipe>();
@@ -51,6 +57,21 @@ public class RecipeService {
     }
     public Recipe getRecipeById(int id){
         return recipes.get(id);
+    }
+
+    public void updateRating(int id, int like){
+        getRecipeById(id).setRating(getRecipeById(id).getRating() + like);
+    }
+
+    public ArrayList<Recipe> search(String name, String category, ArrayList<String> ingredients, String login){
+        ArrayList<Recipe>  searchRecipe = getRecipes();
+        if (!name.equals("")) searchRecipe = RecipeService.getInstance().findByName(searchRecipe, name);
+        if (!category.equals("")) searchRecipe = RecipeService.getInstance().findByCategory(searchRecipe, category);
+        if (ingredients.size()!=0) searchRecipe = RecipeService.getInstance().findByIngredients(searchRecipe, ingredients);
+        if (!login.equals("")) searchRecipe = RecipeService.getInstance().findByAuthor(searchRecipe, login);
+
+        return searchRecipe;
+
     }
 
     public ArrayList<Recipe> findByName(ArrayList<Recipe> r, String name){
