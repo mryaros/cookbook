@@ -25,16 +25,23 @@ public class RecipeService {
         return SingletonHolder.instance;
     }
 
-    public void addRecipe(String name, Category category, ArrayList<Ingredient> ingredients,
-                          String description, ArrayList<String> algorithm, Person author){
+    public void addRecipe(String name, String category, ArrayList<String> ingredientsName, //названия ингредиентов
+                          String description, ArrayList<String> algorithm, String login){
         int id = idSingle.addAndGet(1);
-        recipes.put(id, new Recipe(name, category, ingredients, description, algorithm, author, id));
+
+        ArrayList<Ingredient> ingredientArrayList = new ArrayList<Ingredient>();
+        for (String ingredientName : ingredientsName){
+            ingredientArrayList.add(ingredients.get(addIngredient(ingredientName))); //добавление ингредиента в список ингредиентов, если его не существует, добавление ингредиента в список ингредентов в рецепте
+        }
+
+        recipes.put(id, new Recipe(name, categories.get(addCategory(category)), ingredientArrayList, description, algorithm, PersonService.getInstance().getPerson(login), id));
     }
     public void deleteRecipe(int id){
         recipes.remove(id);
     }
-    //сделать надо красиво сразу для всех полей
-    public void updateRecipe(int id){}
+    public void updateRecipe(Recipe recipe){
+        recipes.put(recipe.getId(), recipe);
+    }
     public ArrayList<Recipe> getRecipes(){
         ArrayList<Recipe> recipesAll = new ArrayList<Recipe>();
         for (Recipe recipe : recipes.values()){
@@ -46,51 +53,89 @@ public class RecipeService {
         return recipes.get(id);
     }
 
-    public ArrayList<Recipe> findByName(String name){
+    public ArrayList<Recipe> findByName(ArrayList<Recipe> r, String name){
         ArrayList<Recipe> recipesName = new ArrayList<Recipe>();
 
-        for (Recipe recipe : recipes.values()){
+        for (Recipe recipe : r){
             if (recipe.getName().equals(name))
                 recipesName.add(recipe);
         }
 
         return recipesName;
     }
-    public ArrayList<Recipe> findByAuthor(int id){
+    public ArrayList<Recipe> findByAuthor(ArrayList<Recipe> r, String login){
         ArrayList<Recipe> recipesAuthor = new ArrayList<Recipe>();
 
-        for (Recipe recipe : recipes.values()){
-            if (recipe.getAuthor().getId()== id)
+        for (Recipe recipe : r){
+            if (recipe.getAuthor().getLogin().equals(login))
                 recipesAuthor.add(recipe);
         }
 
         return recipesAuthor;
     }
-    public ArrayList<Recipe> findByCategory(int id){
+    public ArrayList<Recipe> findByCategory(ArrayList<Recipe> r, String name){
         ArrayList<Recipe> recipesCategoty = new ArrayList<Recipe>();
 
-        for (Recipe recipe : recipes.values()){
-            if (recipe.getCategory().getId() == id)
+        for (Recipe recipe : r){
+            if (recipe.getCategory().getName().equals(name))
                 recipesCategoty.add(recipe);
         }
 
         return recipesCategoty;
     }
-    public ArrayList<Recipe> findByIngredients(ArrayList id){
+    public ArrayList<Recipe> findByIngredients(ArrayList<Recipe> r, ArrayList<String> name){
         ArrayList<Recipe> recipesIngredient = new ArrayList<Recipe>();
-        ArrayList ingredientsId = new ArrayList();
 
-        for (Recipe recipe : recipes.values()) {
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredientsId.add(ingredient.getId());
-            }
-            if (ingredientsId.containsAll(id))
+        for (Recipe recipe : r) {
+            if (recipe.getIngredients().containsAll(name))
                 recipesIngredient.add(recipe);
-            ingredientsId.clear();
         }
 
         return recipesIngredient;
     }
 
 
+    private HashMap<Integer, Category> categories;
+    private AtomicInteger idCategory;
+    public int addCategory(String name){
+        int i = isExistsCategory(name);
+        if (i==(-1)) {
+            int id = idCategory.addAndGet(1);
+            categories.put(id, new Category(name, id));
+            return id;
+        }
+        return i;
+    }
+    public void updateCategory(String name, int id){
+        categories.get(id).setName(name);
+    }
+    public int isExistsCategory(String name){
+        for (Category category : categories.values()){
+            if (category.getName().equals(name))
+                return category.getId();
+        }
+        return -1;
+    }
+
+    private HashMap<Integer, Ingredient> ingredients;
+    private AtomicInteger idIngredient;
+    public int addIngredient(String name){
+        int i = isExistsIngredient(name);
+        if(i==(-1)) {
+            int id = idIngredient.addAndGet(1);
+            ingredients.put(id, new Ingredient(name, id));
+            return id;
+        }
+        return i;
+    }
+    public void updateIngrediet(String name, int id){
+        ingredients.get(id).setName(name);
+    }
+    public int isExistsIngredient(String name){
+        for (Ingredient ingredient : ingredients.values()){
+            if (ingredient.getName().equals(name))
+                return ingredient.getId();
+        }
+        return -1;
+    }
 }

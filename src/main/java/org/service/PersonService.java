@@ -6,21 +6,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class UserService {
+public class PersonService {
     private HashMap<Integer, Person> persons;
     private AtomicInteger idSingle;
 
-    private UserService(){}
-    public static UserService getInstance() {
+    private PersonService(){}
+    public static PersonService getInstance() {
         return SingletonHolder.instance;
     }
     private static final class SingletonHolder {
-        private static final UserService instance = new UserService();
+        private static final PersonService instance = new PersonService();
     }
 
-    public void addPerson(String name, String surname, String login, String password){
-        int id = idSingle.addAndGet(1);
-        persons.put(id, new Person(name, surname, login, password, id));
+    public boolean addPerson(String name, String surname, String login, String password){
+        if(!isExists(login, password)) {
+            int id = idSingle.addAndGet(1);
+            persons.put(id, new Person(name, surname, login, password, id));
+            return true;
+        }
+        return false;
     }
     public void deletePerson(int id){
         persons.remove(id);
@@ -28,14 +32,22 @@ public class UserService {
     public Person getPerson(int id){
         return persons.get(id);
     }
+    public Person getPerson(String login){
+        for(Person person : persons.values()){
+            if (person.getLogin().equals(login))
+                return person;
+        }
+        return getPerson(1); //
+    }
     public ArrayList<Person> getPersons(){
         ArrayList<Person> personsAll = new ArrayList<Person>();
         for(Person person : persons.values())
             personsAll.add(person);
         return personsAll;
     }
-    //реализовать красиво
-    public void updatePerson(int id){}
+    public void updatePerson(Person person){
+        persons.put(person.getId(), person);
+    }
 
     public boolean isExists(String login, String password){
         for (Person person : persons.values()){

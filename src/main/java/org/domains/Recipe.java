@@ -58,6 +58,10 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public void addIngredient(Ingredient ingredient){
+        this.ingredients.add(ingredient);
+    }
+
     @ApiModelProperty(value = "Description of recipe", example ="This recipe for...")
     public String getDescription(){
         return description;
