@@ -15,6 +15,12 @@ import java.util.ArrayList;
 @Api(value = "persons", description = "Operation with personsList")
 @Path("/persons")
 public class PersonsHandler {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public ArrayList<Person> getpersons(){
+        return PersonService.getInstance().getPersons();
+    }
+
     @POST @Path("/registration")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)

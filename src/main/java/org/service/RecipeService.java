@@ -10,20 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by kuznetcov-ia on 17.04.2019.
- */
 public class RecipeService {
-    private HashMap<Integer, Recipe> recipes;
-    private AtomicInteger idSingle;
+    private HashMap<Integer, Recipe> recipes = new HashMap<Integer, Recipe>();
+    private AtomicInteger idSingle = new AtomicInteger();
 
     private RecipeService(){}
-    private static final class SingletonHolder{
-        private static final RecipeService instance = new RecipeService();
-    }
     public static RecipeService getInstance(){
         return SingletonHolder.instance;
     }
+    private static final class SingletonHolder{
+        private static final RecipeService instance = new RecipeService();
+    }
+
 
     public void addRecipe(String name, String category, ArrayList<String> ingredientsName, //названия ингредиентов
                           String description, ArrayList<String> algorithm, String login){
@@ -116,8 +114,8 @@ public class RecipeService {
     }
 
 
-    private HashMap<Integer, Category> categories;
-    private AtomicInteger idCategory;
+    private HashMap<Integer, Category> categories = new HashMap<>();
+    private AtomicInteger idCategory = new AtomicInteger();
     public int addCategory(String name){
         int i = isExistsCategory(name);
         if (i==(-1)) {
@@ -138,8 +136,8 @@ public class RecipeService {
         return -1;
     }
 
-    private HashMap<Integer, Ingredient> ingredients;
-    private AtomicInteger idIngredient;
+    private HashMap<Integer, Ingredient> ingredients = new HashMap<>();
+    private AtomicInteger idIngredient = new AtomicInteger();
     public int addIngredient(String name){
         int i = isExistsIngredient(name);
         if(i==(-1)) {

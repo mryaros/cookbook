@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PersonService {
-    private HashMap<Integer, Person> persons;
-    private AtomicInteger idSingle;
+    private HashMap<Integer, Person> persons = new HashMap<Integer, Person>();
+    private AtomicInteger idSingle = new AtomicInteger();
 
     private PersonService(){}
     public static PersonService getInstance() {

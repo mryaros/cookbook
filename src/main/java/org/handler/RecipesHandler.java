@@ -2,12 +2,14 @@ package org.handler;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.domains.Ingredient;
 import org.domains.Recipe;
 import org.service.RecipeService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kuznetcov-ia on 17.04.2019.
@@ -65,9 +67,13 @@ public class RecipesHandler {
     @ApiOperation(value = "Search by all fields")
     public ArrayList<Recipe> search(@DefaultValue("")@QueryParam("name") String name,
                                     @DefaultValue("")@QueryParam("category") String category,
-                                    @DefaultValue("")@QueryParam("ingredient") ArrayList<String> ingredients,
+                                    @DefaultValue("")@QueryParam("ingredient") List<String> ingredients,
                                     @DefaultValue("")@QueryParam("login") String login){
-        return RecipeService.getInstance().search(name, category, ingredients, login);
+        ArrayList<String> qwe = new ArrayList<String>();
+        for(int i = 0; i<ingredients.size(); i++) {
+            qwe.add(ingredients.get(i));
+        }
+        return RecipeService.getInstance().search(name, category, qwe, login);
         }
 
 }
