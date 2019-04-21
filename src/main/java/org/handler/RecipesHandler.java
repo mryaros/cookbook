@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Api(value = "recipes", description = "Operation with recipesList")
 @Path("/recipes")
+
 public class RecipesHandler {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -69,11 +70,8 @@ public class RecipesHandler {
                                     @DefaultValue("")@QueryParam("category") String category,
                                     @DefaultValue("")@QueryParam("ingredient") List<String> ingredients,
                                     @DefaultValue("")@QueryParam("login") String login){
-        ArrayList<String> qwe = new ArrayList<String>();
-        for(int i = 0; i<ingredients.size(); i++) {
-            qwe.add(ingredients.get(i));
-        }
-        return RecipeService.getInstance().search(name, category, qwe, login);
+
+        return RecipeService.getInstance().search(name, category, ingredients, login);
         }
 
 }

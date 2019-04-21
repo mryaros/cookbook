@@ -7,11 +7,13 @@ import org.service.PersonService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.net.URI;
 import java.util.ArrayList;
 
-/**
- * Created by kuznetcov-ia on 18.04.2019.
- */
 @Api(value = "persons", description = "Operation with personsList")
 @Path("/persons")
 public class PersonsHandler {
@@ -29,6 +31,15 @@ public class PersonsHandler {
         if (PersonService.getInstance().addPerson(person))
             return "succes";
         return "login is busy";
+    }
+    @POST @Path("/authorization")
+    @ApiOperation(value = "User authorization")
+    public Response personAuthorization(@QueryParam("login") String login, @QueryParam("password") String password){
+        if (PersonService.getInstance().isExists(login, password)){
+            return Response.ok().cookie(new NewCookie("login", login)).build();
+        } else {
+            return Response.seeOther(URI.create("/authorization")).build();
+        }
     }
 
     @GET @Path("/{id}")

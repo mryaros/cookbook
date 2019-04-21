@@ -7,6 +7,7 @@ import org.domains.Recipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -61,11 +62,15 @@ public class RecipeService {
         getRecipeById(id).setRating(getRecipeById(id).getRating() + like);
     }
 
-    public ArrayList<Recipe> search(String name, String category, ArrayList<String> ingredients, String login){
+    public ArrayList<Recipe> search(String name, String category, List<String> ingredients, String login){
         ArrayList<Recipe>  searchRecipe = getRecipes();
+        ArrayList<String> ingredientsArrayList = new ArrayList<String>();
+        for(int i = 0; i<ingredients.size(); i++) {
+            ingredientsArrayList.add(ingredients.get(i));
+        }
         if (!name.equals("")) searchRecipe = RecipeService.getInstance().findByName(searchRecipe, name);
         if (!category.equals("")) searchRecipe = RecipeService.getInstance().findByCategory(searchRecipe, category);
-        if (ingredients.size()!=0) searchRecipe = RecipeService.getInstance().findByIngredients(searchRecipe, ingredients);
+        if (ingredients.size()!=0) searchRecipe = RecipeService.getInstance().findByIngredients(searchRecipe, ingredientsArrayList);
         if (!login.equals("")) searchRecipe = RecipeService.getInstance().findByAuthor(searchRecipe, login);
 
         return searchRecipe;
