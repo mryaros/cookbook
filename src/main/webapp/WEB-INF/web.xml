@@ -6,18 +6,18 @@
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
     <servlet-name>cookbook</servlet-name>
-    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
 
     <init-param>
-      <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>org.handler</param-value>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>org.application.MyApplication</param-value>
     </init-param>
 
     <init-param>
       <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
       <param-value>true</param-value>
     </init-param>
-
 
   </servlet>
   <servlet-mapping>
