@@ -1,8 +1,10 @@
 package org.handler;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.domains.Answer;
 import org.domains.Person;
 import org.service.PersonService;
 
@@ -27,20 +29,22 @@ public class PersonsHandler {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("ADMIN")
+    @PermitAll
+    @JsonIgnoreProperties("password") //не уверен, будет ли правильно работать в случае с Answer
     @ApiOperation(value = "Get all persons")
-    public ArrayList<Person> getpersons(){
-        return PersonService.getInstance().getPersons();
+    public Answer getpersons(){
+        return new Answer("succes", PersonService.getInstance().getPersons());
     }
 
     @POST @Path("/registration")
     @PermitAll
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "User registration")
-    public String postPerson(Person person){
+    public Answer postPerson(Person person){
         if (PersonService.getInstance().addPerson(person))
-            return "succes";
-        return "login is busy";
+            return new Answer("Succes");
+        return new Answer("fail", "login is busy");
     }
     @POST @Path("/authorization")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -57,33 +61,34 @@ public class PersonsHandler {
 
     @GET @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @JsonIgnoreProperties("password") //не уверен, будет ли правильно работать в случае с Answer
     @ApiOperation(value = "Get user by id")
-    public Person getPerson(@PathParam("id") int id){
-        return PersonService.getInstance().getPerson(id);
+    public Answer getPerson(@PathParam("id") int id){
+        return new Answer("Succes", PersonService.getInstance().getPerson(id));
     }
     @POST @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "Update person by id")
-    public String updatePerson(@PathParam("id") int id, Person person, @Context HttpHeaders httpHeaders){
+    public Answer updatePerson(@PathParam("id") int id, Person person, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
             PersonService.getInstance().updatePerson(id, person);
-            return "Succes";
+            return new Answer("Succes");
         }
-        return "You can't update this Person";
+        return new Answer("fail","You can't update this Person");
     }
     @DELETE @Path("/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Delete person")
-    public String deletePerson(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
+    public Answer deletePerson(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
             PersonService.getInstance().deletePerson(id);
-            return "Succes";
+            return new Answer("Succes");
         }
-        return "You can't delete this person";
+        return new Answer("fail", "You can't delete this person");
     }
 }

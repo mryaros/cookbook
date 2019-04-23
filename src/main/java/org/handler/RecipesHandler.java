@@ -2,6 +2,7 @@ package org.handler;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.domains.Answer;
 import org.domains.Ingredient;
 import org.domains.Recipe;
 import org.service.PersonService;
@@ -25,67 +26,67 @@ public class RecipesHandler {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get all recipes")
-    public ArrayList<Recipe> getRecipes(){return RecipeService.getInstance().getRecipes(); }
+    public Answer getRecipes(){return new Answer("Succes", RecipeService.getInstance().getRecipes()); }
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Put new recipe")
-    public String postRecipe(Recipe recipe){
+    public Answer postRecipe(Recipe recipe){
         RecipeService.getInstance().addRecipe(recipe);
-        return "Succes";
+        return new Answer("Succes");
     }
 
     @GET @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get recipe by id")
-    public Recipe getRecipe(@PathParam("id") int id){
-        return RecipeService.getInstance().getRecipeById(id);
+    public Answer getRecipe(@PathParam("id") int id){
+        return new Answer("Succes", RecipeService.getInstance().getRecipeById(id));
     }
 
     @POST @Path("/{id}/{like}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update rating")
-    public String updateRating(@PathParam("id") int id, @PathParam("like") int like){
+    public Answer updateRating(@PathParam("id") int id, @PathParam("like") int like){
         RecipeService.getInstance().updateRating(id, like);
-        return "Succes";
+        return new Answer("Succes");
     }
     @POST @Path("/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update rating")
-    public String updateRecipe(@PathParam("id") int id, Recipe recipe, @Context HttpHeaders httpHeaders){
+    public Answer updateRecipe(@PathParam("id") int id, Recipe recipe, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(recipe.getAuthor().getLogin())) {
             RecipeService.getInstance().updateRecipe(id, recipe);
-            return "succes";
+            return new Answer("succes");
         }
-        return "You can't update this recipe";
+        return new Answer("fail","You can't update this recipe");
     }
 
     @DELETE @Path("/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Delete recipe")
-    public String deleteRecipe(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
+    public Answer deleteRecipe(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(RecipeService.getInstance().getRecipeById(id).getAuthor().getLogin())) {
             RecipeService.getInstance().deleteRecipe(id);
-            return "succes";
+            return new Answer("succes");
         }
-        return "You can't delete this recipe";
+        return new Answer("fail","You can't delete this recipe");
     }
 
     @GET @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Search by all fields")
-    public ArrayList<Recipe> search(@DefaultValue("")@QueryParam("name") String name,
+    public Answer search(@DefaultValue("")@QueryParam("name") String name,
                                     @DefaultValue("")@QueryParam("category") String category,
                                     @DefaultValue("")@QueryParam("ingredient") List<String> ingredients,
                                     @DefaultValue("")@QueryParam("login") String login){
 
-        return RecipeService.getInstance().search(name, category, ingredients, login);
+        return new Answer("Succes", RecipeService.getInstance().search(name, category, ingredients, login));
         }
 
 }
