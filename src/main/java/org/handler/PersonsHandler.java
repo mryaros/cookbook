@@ -9,9 +9,7 @@ import org.service.PersonService;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.net.Authenticator;
@@ -29,6 +27,7 @@ public class PersonsHandler {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("ADMIN")
+    @ApiOperation(value = "Get all persons")
     public ArrayList<Person> getpersons(){
         return PersonService.getInstance().getPersons();
     }
@@ -49,6 +48,7 @@ public class PersonsHandler {
     @ApiOperation(value = "User authorization")
     public Response personAuthorization(List<String> list){
         if (PersonService.getInstance().isExists(list.get(0), list.get(1))){
+            SessionService.getInstance().addSession(list.get(0));
             return Response.ok(SessionService.getInstance().toBase64(list.get(0))).build();
         } else {
             return Response.seeOther(URI.create("/authorization")).build();
@@ -65,15 +65,25 @@ public class PersonsHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "Update person by id")
-    public String updatePerson(@PathParam("id") int id, Person person){
-        PersonService.getInstance().updatePerson(id, person);
-        return "Succes";
+    public String updatePerson(@PathParam("id") int id, Person person, @Context HttpHeaders httpHeaders){
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
+            PersonService.getInstance().updatePerson(id, person);
+            return "Succes";
+        }
+        return "You can't update this Person";
     }
     @DELETE @Path("/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "Delete person")
-    public String deletePerson(@PathParam("id") int id){
-        PersonService.getInstance().deletePerson(id);
-        return "Succes";
+    public String deletePerson(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
+            PersonService.getInstance().deletePerson(id);
+            return "Succes";
+        }
+        return "You can't delete this person";
     }
 }

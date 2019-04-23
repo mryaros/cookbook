@@ -27,9 +27,6 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
     @Context
     private ResourceInfo resourceInfo;
 
-    private static final String AUTHORIZATION_PROPERTY = "Authorization";
-    private static final String AUTHENTICATION_SCHEME = "Basic";
-
     @Override
     public void filter(ContainerRequestContext requestContext)
     {
@@ -50,7 +47,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             final MultivaluedMap<String, String> headers = requestContext.getHeaders();
 
             //Fetch authorization header
-            final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+            final List<String> authorization = headers.get("Session");
 
             //If no authorization information present; block access
             if(authorization == null || authorization.isEmpty())
@@ -60,16 +57,12 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
                 return;
             }
 
-            //Get encoded username and password
-            final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+            //Get encoded login
+            final String encodedUserPassword = authorization.get(0);
 
-            //Decode username and password
-            String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
+            //Decode login
+            String login = new String(Base64.decode(encodedUserPassword.getBytes()));
 
-            //Split username and password tokens
-            final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-            final String username = tokenizer.nextToken();
-            final String password = tokenizer.nextToken();
 
             //Verify user access
             if(method.isAnnotationPresent(RolesAllowed.class))
@@ -78,7 +71,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
                 Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
 
                 //Is user valid?
-                if( ! isUserAllowed(username, password, rolesSet))
+                if( ! isUserAllowed(login, rolesSet))
                 {
                     requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                             .entity("You cannot access this resource").build());
@@ -88,7 +81,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
 
         }
     }
-    private boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet)
+    private boolean isUserAllowed(final String login, final Set<String> rolesSet)
     {
         boolean isAllowed = false;
 
@@ -97,7 +90,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
         //Access the database and do this part yourself
         //String userRole = userMgr.getUserRole(username);
 
-        if(username.equals("howtodoinjava") && password.equals("password"))
+        if(login.equals("howtodoinjava"))
         {
             String userRole = "ADMIN";
 

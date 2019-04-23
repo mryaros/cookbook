@@ -4,9 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.domains.Ingredient;
 import org.domains.Recipe;
+import org.service.PersonService;
 import org.service.RecipeService;
+import org.service.SessionService;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,17 +54,27 @@ public class RecipesHandler {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update rating")
-    public String updateRecipe(@PathParam("id") int id, Recipe recipe){
-        RecipeService.getInstance().updateRecipe(id, recipe);
-        return "succes";
+    public String updateRecipe(@PathParam("id") int id, Recipe recipe, @Context HttpHeaders httpHeaders){
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        if(SessionService.getInstance().decodeBase64(encodedLogin).equals(recipe.getAuthor().getLogin())) {
+            RecipeService.getInstance().updateRecipe(id, recipe);
+            return "succes";
+        }
+        return "You can't update this recipe";
     }
 
     @DELETE @Path("/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "Delete recipe")
-    public String deleteRecipe(@PathParam("id") int id){
-        RecipeService.getInstance().deleteRecipe(id);
-        return "succes";
+    public String deleteRecipe(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        if(SessionService.getInstance().decodeBase64(encodedLogin).equals(RecipeService.getInstance().getRecipeById(id).getAuthor().getLogin())) {
+            RecipeService.getInstance().deleteRecipe(id);
+            return "succes";
+        }
+        return "You can't delete this recipe";
     }
 
     @GET @Path("/search")
