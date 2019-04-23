@@ -1,5 +1,6 @@
 package org.application;
 
+import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.handler.PersonsHandler;

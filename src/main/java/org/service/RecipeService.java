@@ -39,6 +39,13 @@ public class RecipeService {
         int id = idSingle.addAndGet(1);
         recipe.setId(id);
         recipes.put(id, recipe);
+
+        for (Ingredient ingredient : recipe.getIngredients()){
+            addIngredient(ingredient.getName()); // добавляет ингредиент, если его нет
+        }
+
+        addCategory(recipe.getCategory().getName());  //добавляет категорию, если её нет
+
     }
     public void deleteRecipe(int id){
         recipes.remove(id);
@@ -46,6 +53,12 @@ public class RecipeService {
     public void updateRecipe(int id, Recipe recipe){
         recipe.setId(id);
         recipes.put(id, recipe);
+
+        for (Ingredient ingredient : recipe.getIngredients()){
+            addIngredient(ingredient.getName()); // добавляет ингредиент, если его нет
+        }
+
+        addCategory(recipe.getCategory().getName());  //добавляет категорию, если её нет
     }
     public ArrayList<Recipe> getRecipes(){
         ArrayList<Recipe> recipesAll = new ArrayList<Recipe>();

@@ -33,8 +33,6 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
     @Override
     public void filter(ContainerRequestContext requestContext)
     {
-        if(!(requestContext.getUriInfo().getPath().equals("persons/authorization")||requestContext.getUriInfo().getPath().equals("persons/registration")))
-        {
         Method method = resourceInfo.getResourceMethod();
         //Access allowed for all
         if( ! method.isAnnotationPresent(PermitAll.class))
@@ -89,7 +87,6 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             }
 
         }
-    }
     }
     private boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet)
     {

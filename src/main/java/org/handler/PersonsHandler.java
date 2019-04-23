@@ -1,10 +1,12 @@
 package org.handler;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.domains.Person;
 import org.service.PersonService;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,8 +17,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.net.Authenticator;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.glassfish.jersey.internal.util.Base64;
+import org.service.SessionService;
 
 @Api(value = "persons", description = "Operation with personsList")
 @Path("/persons")
@@ -29,6 +34,7 @@ public class PersonsHandler {
     }
 
     @POST @Path("/registration")
+    @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "User registration")
@@ -38,10 +44,12 @@ public class PersonsHandler {
         return "login is busy";
     }
     @POST @Path("/authorization")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     @ApiOperation(value = "User authorization")
-    public Response personAuthorization(@QueryParam("login") String login, @QueryParam("password") String password){
-        if (PersonService.getInstance().isExists(login, password)){
-            return Response.ok(new String(Base64.encode((login+":"+password).getBytes()))).build();
+    public Response personAuthorization(List<String> list){
+        if (PersonService.getInstance().isExists(list.get(0), list.get(1))){
+            return Response.ok(SessionService.getInstance().toBase64(list.get(0))).build();
         } else {
             return Response.seeOther(URI.create("/authorization")).build();
         }

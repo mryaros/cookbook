@@ -4,10 +4,12 @@ import org.domains.Person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PersonService {
-    private HashMap<Integer, Person> persons = new HashMap<Integer, Person>();
+    private ConcurrentHashMap<Integer, Person> persons = new ConcurrentHashMap<Integer, Person>();
     private AtomicInteger idSingle = new AtomicInteger();
 
     private PersonService(){}
@@ -18,17 +20,17 @@ public class PersonService {
         private static final PersonService instance = new PersonService();
     }
 
-    public boolean addPerson(String name, String surname, String login, String password){
-        if(!isExists(login, password)) {
-            int id = idSingle.addAndGet(1);
-            persons.put(id, new Person(name, surname, login, password, id));
-            return true;
-        }
-        return false;
-    }
+//    public boolean addPerson(String name, String surname, String login, String password){
+//        if(!isExists(login)) {
+//            int id = idSingle.addAndGet(1);
+//            persons.put(id, new Person(name, surname, login, password, id));
+//            return true;
+//        }
+//        return false;
+//    }
 
     public boolean addPerson(Person person){
-        if(!isExists(person.getLogin(), person.getPassword())){
+        if(!isExists(person.getLogin())){
             int id = idSingle.addAndGet(1);
             person.setId(id);
             persons.put(id, person);
@@ -47,7 +49,7 @@ public class PersonService {
             if (person.getLogin().equals(login))
                 return person;
         }
-        return getPerson(1); //
+        return null;
     }
     public ArrayList<Person> getPersons(){
         ArrayList<Person> personsAll = new ArrayList<Person>();
@@ -60,9 +62,17 @@ public class PersonService {
         persons.put(id, person);
     }
 
+    public boolean isExists(String login){
+        for (Person person : persons.values()){
+            if (person.getLogin().equals(login))
+                return true;
+        }
+        return false;
+    }
+
     public boolean isExists(String login, String password){
         for (Person person : persons.values()){
-            if (person.getLogin().equals(login) && person.getPassword().equals(password))
+            if (person.getLogin().equals(login)&&person.getPassword().equals(password))
                 return true;
         }
         return false;
