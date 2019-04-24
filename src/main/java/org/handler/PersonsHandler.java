@@ -50,12 +50,13 @@ public class PersonsHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @PermitAll
     @ApiOperation(value = "User authorization")
-    public Response personAuthorization(List<String> list){
+    public Answer personAuthorization(List<String> list){
         if (PersonService.getInstance().isExists(list.get(0), list.get(1))){
             SessionService.getInstance().addSession(list.get(0));
-            return Response.ok(SessionService.getInstance().toBase64(list.get(0))).build();
+            return new Answer ("Succes", SessionService.getInstance().toBase64(list.get(0)));
         } else {
-            return Response.seeOther(URI.create("/authorization")).build();
+            return new Answer("fail");
+            //return Response.seeOther(URI.create("/authorization")).build();
         }
     }
 
@@ -68,7 +69,7 @@ public class PersonsHandler {
     }
     @POST @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update person by id")
     public Answer updatePerson(@PathParam("id") int id, Person person, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
@@ -86,6 +87,7 @@ public class PersonsHandler {
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
+            SessionService.getInstance().deleteSession(encodedLogin);
             PersonService.getInstance().deletePerson(id);
             return new Answer("Succes");
         }

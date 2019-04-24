@@ -26,6 +26,10 @@ public class SessionService {
         sessions.put(toBase64(login), PersonService.getInstance().getPerson(login));
     }
 
+    public void deleteSession(String login){
+        sessions.remove(login);
+    }
+
     public boolean isExists(String login){
         if (sessions.get(login) != null)
             return true;

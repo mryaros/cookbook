@@ -58,7 +58,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             final String encodedUserLogin = authorization.get(0);
 
             //If no authorization information present; block access
-            if(authorization == null || authorization.isEmpty()|| SessionService.getInstance().isExists(encodedUserLogin))
+            if(authorization == null || authorization.isEmpty()|| !SessionService.getInstance().isExists(encodedUserLogin))
             {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                         .entity("You cannot access this resource, login please").build());
