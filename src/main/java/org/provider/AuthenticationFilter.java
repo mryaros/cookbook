@@ -17,6 +17,7 @@ import javax.ws.rs.ext.Provider;
 import org.domains.Person;
 import org.glassfish.jersey.internal.util.Base64;
 import org.service.PersonService;
+import org.service.SessionService;
 
 /**
  * This filter verify the access permissions for a user
@@ -28,6 +29,8 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
 
     @Context
     private ResourceInfo resourceInfo;
+
+    private static final String HEADER = "Session";
 
     @Override
     public void filter(ContainerRequestContext requestContext)
@@ -49,21 +52,22 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             final MultivaluedMap<String, String> headers = requestContext.getHeaders();
 
             //Fetch authorization header
-            final List<String> authorization = headers.get("Session");
+            final List<String> authorization = headers.get(HEADER);
+
+            //Get encoded login
+            final String encodedUserLogin = authorization.get(0);
 
             //If no authorization information present; block access
-            if(authorization == null || authorization.isEmpty())
+            if(authorization == null || authorization.isEmpty()|| SessionService.getInstance().isExists(encodedUserLogin))
             {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("You cannot access this resource").build());
+                        .entity("You cannot access this resource, login please").build());
                 return;
             }
 
-            //Get encoded login
-            final String encodedUserPassword = authorization.get(0);
 
             //Decode login
-            String login = new String(Base64.decode(encodedUserPassword.getBytes()));
+            String login = new String(Base64.decode(encodedUserLogin.getBytes()));
 
 
             //Verify user access
