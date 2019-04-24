@@ -3,23 +3,25 @@ package org.domains;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel("Person bean")
+@ApiModel("Person Class")
 public class Person {
     private String name;
     private String surname;
     private String login;
     private String password;
+    private String role;
     private int id;
 
     public Person(){}
-    public Person(String name, String surname, String login, String password){
-        this(name, surname, login, password, -1);
+    public Person(String name, String surname, String login, String password, String role){
+        this(name, surname, login, password, role, -1);
     }
-    public Person(String name, String surname, String login, String password, int id){
+    public Person(String name, String surname, String login, String password, String role, int id){
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.password = password;
+        this.role = role;
         this.id = id;
     }
 
@@ -58,6 +60,15 @@ public class Person {
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    @ApiModelProperty(value = "role of person", example = "USER, ADMIN")
+    public String getRole(){
+        return role;
+    }
+
+    public void setRole(String role){
+        this.role = role;
     }
 
     @ApiModelProperty(value = "id of person", example = "1")

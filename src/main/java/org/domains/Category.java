@@ -3,7 +3,7 @@ package org.domains;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel("Category Bean")
+@ApiModel("Category Class")
 public class Category {
     private String name;
     private int id;

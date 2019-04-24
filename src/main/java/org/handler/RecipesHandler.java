@@ -47,14 +47,16 @@ public class RecipesHandler {
     @POST @Path("/{id}/{like}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update rating")
-    public Answer updateRating(@PathParam("id") int id, @PathParam("like") int like){
-        RecipeService.getInstance().updateRating(id, like);
+    public Answer updateRating(@PathParam("id") int id, @PathParam("like") int like, @Context HttpHeaders httpHeaders){
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)), like);
         return new Answer("Succes");
     }
     @POST @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Update rating")
+    @ApiOperation(value = "Update recipe")
     public Answer updateRecipe(@PathParam("id") int id, Recipe recipe, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);

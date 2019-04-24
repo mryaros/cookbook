@@ -4,8 +4,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
-@ApiModel("Recipe Bean")
+@ApiModel("Recipe Class")
 public class Recipe {
     private String name;
     private Category category;
@@ -13,7 +15,7 @@ public class Recipe {
     private String description;
     private ArrayList<String> algorithm;
     private Person author;
-    private int rating;
+    private ConcurrentHashMap<Person, Integer> rating;
     private int id;
 
     public Recipe(){}
@@ -27,7 +29,7 @@ public class Recipe {
         this.description = description;
         this.algorithm = algorithm;
         this.author = author;
-        this.rating = 0;
+        this.rating = null;
         this.id = id;
     }
 
@@ -90,12 +92,12 @@ public class Recipe {
     }
 
     @ApiModelProperty(value = "Rating of recipe", example ="100500")
-    public int getRating(){
+    public ConcurrentHashMap<Person, Integer> getRating(){
         return rating;
     }
 
-    public void setRating(int rating){
-        this.rating = rating;
+    public void setRating(Person person, int value){
+        rating.put(person, value);
     }
 
     @ApiModelProperty(value = "ID of recipe", example ="1")

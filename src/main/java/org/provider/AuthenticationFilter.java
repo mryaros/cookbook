@@ -14,7 +14,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.domains.Person;
 import org.glassfish.jersey.internal.util.Base64;
+import org.service.PersonService;
 
 /**
  * This filter verify the access permissions for a user
@@ -90,15 +92,9 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
         //Access the database and do this part yourself
         //String userRole = userMgr.getUserRole(username);
 
-        if(login.equals("howtodoinjava"))
+        if(PersonService.getInstance().getPerson(login).getRole().equals("ADMIN"))
         {
-            String userRole = "ADMIN";
-
-            //Step 2. Verify user role
-            if(rolesSet.contains(userRole))
-            {
-                isAllowed = true;
-            }
+            isAllowed = true;
         }
         return isAllowed;
     }

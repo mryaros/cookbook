@@ -20,10 +20,10 @@ public class PersonService {
         private static final PersonService instance = new PersonService();
     }
 
-//    public boolean addPerson(String name, String surname, String login, String password){
+//    public boolean addPerson(String name, String surname, String login, String password, String role){
 //        if(!isExists(login)) {
 //            int id = idSingle.addAndGet(1);
-//            persons.put(id, new Person(name, surname, login, password, id));
+//            persons.put(id, new Person(name, surname, login, password, role, id));
 //            return true;
 //        }
 //        return false;

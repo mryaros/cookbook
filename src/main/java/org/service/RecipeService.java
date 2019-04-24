@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecipeService {
-    private HashMap<Integer, Recipe> recipes = new HashMap<Integer, Recipe>();
+    private ConcurrentHashMap<Integer, Recipe> recipes = new ConcurrentHashMap<Integer, Recipe>();
     private AtomicInteger idSingle = new AtomicInteger();
 
     private RecipeService(){}
@@ -71,8 +72,8 @@ public class RecipeService {
         return recipes.get(id);
     }
 
-    public void updateRating(int id, int like){
-        getRecipeById(id).setRating(getRecipeById(id).getRating() + like);
+    public void updateRating(int recipeId, Person person, int like){
+        getRecipeById(recipeId).setRating(person, like);
     }
 
     public ArrayList<Recipe> search(String name, String category, List<String> ingredients, String login){
@@ -132,7 +133,7 @@ public class RecipeService {
     }
 
 
-    private HashMap<Integer, Category> categories = new HashMap<>();
+    private ConcurrentHashMap<Integer, Category> categories = new ConcurrentHashMap<>();
     private AtomicInteger idCategory = new AtomicInteger();
     public int addCategory(String name){
         int i = isExistsCategory(name);
@@ -154,7 +155,7 @@ public class RecipeService {
         return -1;
     }
 
-    private HashMap<Integer, Ingredient> ingredients = new HashMap<>();
+    private ConcurrentHashMap<Integer, Ingredient> ingredients = new ConcurrentHashMap<>();
     private AtomicInteger idIngredient = new AtomicInteger();
     public int addIngredient(String name){
         int i = isExistsIngredient(name);
