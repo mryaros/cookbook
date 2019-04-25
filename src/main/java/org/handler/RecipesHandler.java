@@ -67,10 +67,14 @@ public class RecipesHandler {
         return new Answer("Succes", RecipeService.getInstance().getRecipeById(id));
     }
 
-    @POST @Path("/{id}/{like}")
+    @POST @Path("/{like}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update rating")
-    public Answer updateRating(@PathParam("id") int id, @PathParam("like") int like, @Context HttpHeaders httpHeaders){
+    public Answer updateRating(@PathParam("id") int id, @PathParam("like") String stringLike, @Context HttpHeaders httpHeaders){
+        int like = 2;
+        if(stringLike.equals("like"))like = 1;
+        if(stringLike.equals("dislike"))like = -1;
+        if(stringLike.equals("deletelike"))like = 0;
         if(!(like== 1 || like==0 || like==-1))
             return new Answer("fail", "You can't do that. Please do not cheat");
         if(RecipeService.getInstance().getRecipeById(id)==null){
