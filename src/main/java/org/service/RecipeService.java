@@ -34,19 +34,19 @@ public class RecipeService {
             ingredientArrayList.add(ingredients.get(addIngredient(ingredientName))); //добавление ингредиента в список ингредиентов, если его не существует, добавление ингредиента в список ингредентов в рецепте
         }
 
-        recipes.put(id, new Recipe(name, categories.get(addCategory(category)), ingredientArrayList, description, algorithm, PersonService.getInstance().getPerson(login), id));
+        recipes.put(id, new Recipe(name, categories.get(addCategory(category)), ingredientArrayList, description, algorithm, id));
     }
     public void addRecipe(Recipe recipe){
+        ArrayList<Ingredient> ingredients1 = new ArrayList<Ingredient>();
+        for (Ingredient ingredient : recipe.getIngredients()){
+            ingredients1.add(ingredients.get(addIngredient(ingredient.getName()))); // добавляет ингредиент, если его нет
+        }
+        recipe.setIngredients(ingredients1);
+        recipe.setCategory(categories.get(addCategory(recipe.getCategory().getName())));   //добавляет категорию, если её нет
+
         int id = idSingle.addAndGet(1);
         recipe.setId(id);
         recipes.put(id, recipe);
-
-        for (Ingredient ingredient : recipe.getIngredients()){
-            addIngredient(ingredient.getName()); // добавляет ингредиент, если его нет
-        }
-
-        addCategory(recipe.getCategory().getName());  //добавляет категорию, если её нет
-
     }
     public void deleteRecipe(int id){
         recipes.remove(id);
@@ -72,8 +72,8 @@ public class RecipeService {
         return recipes.get(id);
     }
 
-    public void updateRating(int recipeId, Person person, int like){
-        getRecipeById(recipeId).setRating(person, like);
+    public void updateRating(int recipeId, int personID, int like){
+        getRecipeById(recipeId).setRating(personID, like);
     }
 
     public ArrayList<Recipe> search(String name, String category, List<String> ingredients, String login){
@@ -104,8 +104,8 @@ public class RecipeService {
     public ArrayList<Recipe> findByAuthor(ArrayList<Recipe> r, String login){
         ArrayList<Recipe> recipesAuthor = new ArrayList<Recipe>();
 
-        for (Recipe recipe : r){
-            if (recipe.getAuthor().getLogin().equals(login))
+        for (Recipe recipe : r) {
+            if (PersonService.getInstance().getPerson(recipe.getAuthorID()).getLogin().equals(login))
                 recipesAuthor.add(recipe);
         }
 
@@ -124,8 +124,14 @@ public class RecipeService {
     public ArrayList<Recipe> findByIngredients(ArrayList<Recipe> r, ArrayList<String> name){
         ArrayList<Recipe> recipesIngredient = new ArrayList<Recipe>();
 
+        ArrayList<String> nameOfIngredient = new ArrayList<String>();
+
         for (Recipe recipe : r) {
-            if (recipe.getIngredients().containsAll(name))
+            nameOfIngredient.clear();
+            for (Ingredient i : recipe.getIngredients()){
+                nameOfIngredient.add(i.getName());
+            }
+                if (nameOfIngredient.containsAll(name))
                 recipesIngredient.add(recipe);
         }
 

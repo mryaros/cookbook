@@ -14,22 +14,22 @@ public class Recipe {
     private ArrayList<Ingredient> ingredients;
     private String description;
     private ArrayList<String> algorithm;
-    private Person author;
-    private ConcurrentHashMap<Person, Integer> rating;
+    private int authorID;
+    private ConcurrentHashMap<Integer, Integer> rating = new ConcurrentHashMap<>();
     private int id;
 
     public Recipe(){}
-    public Recipe(String name, Category category, ArrayList<Ingredient> ingredients, String description, ArrayList<String> algorithm, Person author){
-        this(name, category, ingredients, description, algorithm, author,  -1);
+    public Recipe(String name, Category category, ArrayList<Ingredient> ingredients, String description, ArrayList<String> algorithm, int authorID){
+        this(name, category, ingredients, description, algorithm, authorID,  -1);
     }
-    public Recipe(String name, Category category, ArrayList<Ingredient> ingredients, String description, ArrayList<String> algorithm, Person author, int id){
+    public Recipe(String name, Category category, ArrayList<Ingredient> ingredients, String description, ArrayList<String> algorithm, int authorID, int id){
         this.name = name;
         this.category = category;
         this.ingredients = ingredients;
         this.description = description;
         this.algorithm = algorithm;
-        this.author = author;
-        this.rating = null;
+        this.authorID = authorID;
+
         this.id = id;
     }
 
@@ -83,21 +83,21 @@ public class Recipe {
     }
 
     @ApiModelProperty(value = "Autoor of recipe", example ="Ivan Ivanov")
-    public Person getAuthor(){
-        return author;
+    public int getAuthorID(){
+        return authorID;
     }
 
-    public void setAuthor(Person author){
-        this.author = author;
+    public void setAuthorID(int authorID){
+        this.authorID = authorID;
     }
 
     @ApiModelProperty(value = "Rating of recipe", example ="100500")
-    public ConcurrentHashMap<Person, Integer> getRating(){
+    public ConcurrentHashMap<Integer, Integer> getRating(){
         return rating;
     }
 
-    public void setRating(Person person, int value){
-        rating.put(person, value);
+    public void setRating(int personID, int value){
+        rating.put(personID, value);
     }
 
     @ApiModelProperty(value = "ID of recipe", example ="1")
