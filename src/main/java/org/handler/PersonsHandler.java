@@ -65,6 +65,8 @@ public class PersonsHandler {
     @JsonIgnoreProperties("password") //не уверен, будет ли правильно работать в случае с Answer
     @ApiOperation(value = "Get user by id")
     public Answer getPerson(@PathParam("id") int id){
+        if (PersonService.getInstance().getPerson(id)==null)
+            return new Answer("fail", "There is no user with this ID");
         return new Answer("Succes", PersonService.getInstance().getPerson(id));
     }
     @POST @Path("/{id}")
@@ -74,6 +76,8 @@ public class PersonsHandler {
     public Answer updatePerson(@PathParam("id") int id, Person person, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
+        if (PersonService.getInstance().getPerson(id)==null)
+            return new Answer("fail", "There is no user with this ID");
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
             PersonService.getInstance().updatePerson(id, person);
             return new Answer("Succes");
@@ -86,6 +90,8 @@ public class PersonsHandler {
     public Answer deletePerson(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
+        if (PersonService.getInstance().getPerson(id)==null)
+            return new Answer("fail", "There is no user with this ID");
         if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
             SessionService.getInstance().deleteSession(encodedLogin);
             PersonService.getInstance().deletePerson(id);
