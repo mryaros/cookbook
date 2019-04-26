@@ -67,24 +67,36 @@ public class RecipesHandler {
         return new Answer("Succes", RecipeService.getInstance().getRecipeById(id));
     }
 
-    @POST @Path("/{like}/{id}")
+    @POST @Path("/like/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update rating")
-    public Answer updateRating(@PathParam("id") int id, @PathParam("like") String stringLike, @Context HttpHeaders httpHeaders){
-        int like = 2;
-        if(stringLike.equals("like"))like = 1;
-        if(stringLike.equals("dislike"))like = -1;
-        if(stringLike.equals("deletelike"))like = 0;
-        if(!(like== 1 || like==0 || like==-1))
-            return new Answer("fail", "You can't do that. Please do not cheat");
+    public Answer updateRatingLike(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
         if(RecipeService.getInstance().getRecipeById(id)==null){
             return new Answer("fail", "There is no recipe with this ID");
         }
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
-        RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), like);
+        if (RecipeService.getInstance().getRecipeById(id).getRating().get(PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId()) == 1)
+            RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 0);
+        else RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 1);
         return new Answer("Succes");
     }
+
+    @POST @Path("/dislike/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update rating")
+    public Answer updateRatingDislike(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
+        if(RecipeService.getInstance().getRecipeById(id)==null){
+            return new Answer("fail", "There is no recipe with this ID");
+        }
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        if (RecipeService.getInstance().getRecipeById(id).getRating().get(PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId()) == -1)
+            RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 0);
+        else RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), -1);
+        return new Answer("Succes");
+    }
+
     @POST @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
