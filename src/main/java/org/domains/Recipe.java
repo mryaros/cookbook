@@ -15,7 +15,7 @@ public class Recipe {
     private String description;
     private ArrayList<String> algorithm;
     private int authorID;
-    private ConcurrentHashMap<Integer, Integer> rating = new ConcurrentHashMap<>();
+    private HashMap<Integer, Integer> rating = new HashMap<>();
     private int id;
 
     public Recipe(){}
@@ -92,7 +92,7 @@ public class Recipe {
     }
 
     @ApiModelProperty(value = "Rating of recipe", example ="100500")
-    public ConcurrentHashMap<Integer, Integer> getRating(){
+    public HashMap<Integer, Integer> getRating(){
         return rating;
     }
 

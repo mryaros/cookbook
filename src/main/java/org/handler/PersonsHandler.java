@@ -33,7 +33,8 @@ public class PersonsHandler {
     @JsonIgnoreProperties("password") //не уверен, будет ли правильно работать в случае с Answer
     @ApiOperation(value = "Get all persons")
     public Answer getpersons(){
-        return new Answer("succes", PersonService.getInstance().getPersons());
+        return Answer.succes(PersonService.getInstance().getPersons());
+//        return new Answer("succes", PersonService.getInstance().getPersons());
     }
 
     @POST @Path("/registration")
@@ -43,19 +44,21 @@ public class PersonsHandler {
     @ApiOperation(value = "User registration")
     public Answer postPerson(Person person){
         if (PersonService.getInstance().addPerson(person))
-            return new Answer("Succes");
-        return new Answer("fail", "login is busy");
+            return Answer.succes();
+        return Answer.fail("login is busy");
     }
     @POST @Path("/authorization")
     @Consumes(MediaType.APPLICATION_JSON)
     @PermitAll
     @ApiOperation(value = "User authorization")
-    public Answer personAuthorization(List<String> list){
-        if (PersonService.getInstance().isExists(list.get(0), list.get(1))){
-            SessionService.getInstance().addSession(list.get(0));
-            return new Answer ("Succes", SessionService.getInstance().toBase64(list.get(0)));
+    public Answer personAuthorization(Map<String, String> map){
+        Map.Entry<String, String> entry = map.entrySet().iterator().next();
+        if (PersonService.getInstance().checkLoginPassword(entry.getKey(), entry.getValue())){
+            SessionService.getInstance().addSession(entry.getKey());
+            //return Answer.succes (SessionService.getInstance().toBase64(list.get(0)));
+            return Answer.succes(SessionService.getInstance().getSession(entry.getKey()));
         } else {
-            return new Answer("fail");
+            return Answer.fail("check your login or password");
             //return Response.seeOther(URI.create("/authorization")).build();
         }
     }
@@ -65,9 +68,9 @@ public class PersonsHandler {
     @JsonIgnoreProperties("password") //не уверен, будет ли правильно работать в случае с Answer
     @ApiOperation(value = "Get user by id")
     public Answer getPerson(@PathParam("id") int id){
-        if (PersonService.getInstance().getPerson(id)==null)
-            return new Answer("fail", "There is no user with this ID");
-        return new Answer("Succes", PersonService.getInstance().getPerson(id));
+        if (PersonService.getInstance().isExists(id))
+            return Answer.fail("There is no user with this ID");
+        return Answer.succes(PersonService.getInstance().getPerson(id));
     }
     @POST @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -76,13 +79,13 @@ public class PersonsHandler {
     public Answer updatePerson(@PathParam("id") int id, Person person, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
-        if (PersonService.getInstance().getPerson(id)==null)
-            return new Answer("fail", "There is no user with this ID");
-        if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
+        if (PersonService.getInstance().isExists(id))
+            return Answer.fail("There is no user with this ID");
+        if(SessionService.getInstance().isActionAllowed(encodedLogin, id)) {
             PersonService.getInstance().updatePerson(id, person);
-            return new Answer("Succes");
+            return Answer.succes();
         }
-        return new Answer("fail","You can't update this Person");
+        return Answer.fail("You can't update this Person");
     }
     @DELETE @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -90,13 +93,13 @@ public class PersonsHandler {
     public Answer deletePerson(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
         List<String> login = httpHeaders.getRequestHeader("Session");
         String encodedLogin = login.get(0);
-        if (PersonService.getInstance().getPerson(id)==null)
-            return new Answer("fail", "There is no user with this ID");
-        if(SessionService.getInstance().decodeBase64(encodedLogin).equals(PersonService.getInstance().getPerson(id).getLogin())) {
+        if (PersonService.getInstance().isExists(id))
+            return Answer.fail("There is no user with this ID");
+        if(SessionService.getInstance().isActionAllowed(encodedLogin, id)) {
             SessionService.getInstance().deleteSession(encodedLogin);
             PersonService.getInstance().deletePerson(id);
-            return new Answer("Succes");
+            return Answer.succes();
         }
-        return new Answer("fail", "You can't delete this person");
+        return  Answer.fail("You can't delete this person");
     }
 }

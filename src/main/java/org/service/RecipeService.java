@@ -2,13 +2,10 @@ package org.service;
 
 import org.domains.Category;
 import org.domains.Ingredient;
-import org.domains.Person;
 import org.domains.Recipe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,18 +28,18 @@ public class RecipeService {
 
         ArrayList<Ingredient> ingredientArrayList = new ArrayList<Ingredient>();
         for (String ingredientName : ingredientsName){
-            ingredientArrayList.add(ingredients.get(addIngredient(ingredientName))); //добавление ингредиента в список ингредиентов, если его не существует, добавление ингредиента в список ингредентов в рецепте
+            ingredientArrayList.add(ingredients.get(addIngredientAndGetId(ingredientName))); //добавление ингредиента в список ингредиентов, если его не существует, добавление ингредиента в список ингредентов в рецепте
         }
 
-        recipes.put(id, new Recipe(name, categories.get(addCategory(category)), ingredientArrayList, description, algorithm, id));
+        recipes.put(id, new Recipe(name, categories.get(addCategoryAndGetId(category)), ingredientArrayList, description, algorithm, id));
     }
     public void addRecipe(Recipe recipe){
         ArrayList<Ingredient> ingredients1 = new ArrayList<Ingredient>();
         for (Ingredient ingredient : recipe.getIngredients()){
-            ingredients1.add(ingredients.get(addIngredient(ingredient.getName()))); // добавляет ингредиент, если его нет
+            ingredients1.add(ingredients.get(addIngredientAndGetId(ingredient.getName()))); // добавляет ингредиент, если его нет
         }
         recipe.setIngredients(ingredients1);
-        recipe.setCategory(categories.get(addCategory(recipe.getCategory().getName())));   //добавляет категорию, если её нет
+        recipe.setCategory(categories.get(addCategoryAndGetId(recipe.getCategory().getName())));   //добавляет категорию, если её нет
 
         int id = idSingle.addAndGet(1);
         recipe.setId(id);
@@ -56,36 +53,30 @@ public class RecipeService {
         recipes.put(id, recipe);
 
         for (Ingredient ingredient : recipe.getIngredients()){
-            addIngredient(ingredient.getName()); // добавляет ингредиент, если его нет
+            addIngredientAndGetId(ingredient.getName()); // добавляет ингредиент, если его нет
         }
 
-        addCategory(recipe.getCategory().getName());  //добавляет категорию, если её нет
+        addCategoryAndGetId(recipe.getCategory().getName());  //добавляет категорию, если её нет
     }
     public ArrayList<Recipe> getRecipes(){
-        ArrayList<Recipe> recipesAll = new ArrayList<Recipe>();
-        for (Recipe recipe : recipes.values()){
-            recipesAll.add(recipe);
-        }
-        return recipesAll;
+        return new ArrayList<Recipe>(recipes.values());
     }
     public Recipe getRecipeById(int id){
         return recipes.get(id);
     }
-
+    public boolean isExists(int id){
+        return recipes.containsKey(id);
+    }
     public void updateRating(int recipeId, int personID, int like){
         getRecipeById(recipeId).setRating(personID, like);
     }
 
     public ArrayList<Recipe> search(String name, String category, List<String> ingredients, String login){
         ArrayList<Recipe>  searchRecipe = getRecipes();
-        ArrayList<String> ingredientsArrayList = new ArrayList<String>();
-        for(int i = 0; i<ingredients.size(); i++) {
-            ingredientsArrayList.add(ingredients.get(i));
-        }
-        if (!name.equals("")) searchRecipe = RecipeService.getInstance().findByName(searchRecipe, name);
-        if (!category.equals("")) searchRecipe = RecipeService.getInstance().findByCategory(searchRecipe, category);
-        if (ingredients.size()!=0) searchRecipe = RecipeService.getInstance().findByIngredients(searchRecipe, ingredientsArrayList);
-        if (!login.equals("")) searchRecipe = RecipeService.getInstance().findByAuthor(searchRecipe, login);
+        if (!name.equals("")) searchRecipe = findByName(searchRecipe, name);
+        if (!category.equals("")) searchRecipe = findByCategory(searchRecipe, category);
+        if (ingredients.size()!=0) searchRecipe = findByIngredients(searchRecipe, ingredients);
+        if (!login.equals("")) searchRecipe = findByAuthor(searchRecipe, login);
 
         return searchRecipe;
 
@@ -121,7 +112,7 @@ public class RecipeService {
 
         return recipesCategoty;
     }
-    public ArrayList<Recipe> findByIngredients(ArrayList<Recipe> r, ArrayList<String> name){
+    public ArrayList<Recipe> findByIngredients(ArrayList<Recipe> r, List<String> name){
         ArrayList<Recipe> recipesIngredient = new ArrayList<Recipe>();
 
         ArrayList<String> nameOfIngredient = new ArrayList<String>();
@@ -141,7 +132,7 @@ public class RecipeService {
 
     private ConcurrentHashMap<Integer, Category> categories = new ConcurrentHashMap<>();
     private AtomicInteger idCategory = new AtomicInteger();
-    public int addCategory(String name){
+    public int addCategoryAndGetId(String name){
         int i = isExistsCategory(name);
         if (i==(-1)) {
             int id = idCategory.addAndGet(1);
@@ -163,7 +154,7 @@ public class RecipeService {
 
     private ConcurrentHashMap<Integer, Ingredient> ingredients = new ConcurrentHashMap<>();
     private AtomicInteger idIngredient = new AtomicInteger();
-    public int addIngredient(String name){
+    public int addIngredientAndGetId(String name){
         int i = isExistsIngredient(name);
         if(i==(-1)) {
             int id = idIngredient.addAndGet(1);

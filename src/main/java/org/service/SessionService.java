@@ -26,6 +26,10 @@ public class SessionService {
         sessions.put(toBase64(login), PersonService.getInstance().getPerson(login));
     }
 
+    public String getSession(String login){
+        return new String(Base64.encode((login).getBytes()));
+    }
+
     public void deleteSession(String login){
         sessions.remove(login);
     }
@@ -42,5 +46,9 @@ public class SessionService {
 
     public String decodeBase64(String login){
         return new String(Base64.decode(login.getBytes()));
+    }
+
+    public boolean isActionAllowed(String encodedlogin, int id){
+        return encodedlogin.equals(toBase64(PersonService.getInstance().getPerson(id).getLogin()));
     }
 }

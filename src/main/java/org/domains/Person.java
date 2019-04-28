@@ -2,12 +2,15 @@ package org.domains;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @ApiModel("Person Class")
 public class Person {
     private String name;
     private String surname;
     private String login;
+    @JsonIgnore
     private String password;
     private String role;
     private int id;
@@ -53,11 +56,13 @@ public class Person {
         this.login = login;
     }
 
+    @JsonIgnore
     @ApiModelProperty(value = "Password of person", example = "qwe123")
     public String getPassword(){
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password){
         this.password = password;
     }

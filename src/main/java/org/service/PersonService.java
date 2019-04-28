@@ -52,10 +52,7 @@ public class PersonService {
         return null;
     }
     public ArrayList<Person> getPersons(){
-        ArrayList<Person> personsAll = new ArrayList<Person>();
-        for(Person person : persons.values())
-            personsAll.add(person);
-        return personsAll;
+        return new ArrayList<Person>(persons.values());
     }
     public void updatePerson(int id, Person person){
         person.setId(id);
@@ -70,7 +67,13 @@ public class PersonService {
         return false;
     }
 
-    public boolean isExists(String login, String password){
+    public boolean isExists(int id){
+        if (persons.containsKey(id))
+            return true;
+        return false;
+    }
+
+    public boolean checkLoginPassword(String login, String password){
         for (Person person : persons.values()){
             if (person.getLogin().equals(login)&&person.getPassword().equals(password))
                 return true;

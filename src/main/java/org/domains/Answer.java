@@ -7,12 +7,12 @@ import javax.ws.rs.core.Response;
 
 @ApiModel("Answer Class")
 public class Answer {
-    private String status;
-    private String message;
-    private Object data;
+    private final String status;
+    private final String message;
+    private final Object data;
 
     public Answer(String status){
-        this.status = status;
+        this(status, "", null);
     }
     public Answer(String status, Object data){
         this(status, "", data);
@@ -38,5 +38,30 @@ public class Answer {
     @ApiModelProperty(value = "Body of response", example = "{ \"name\": \"Вася\", \"age\": 35 }")
     public Object getData(){
         return data;
+    }
+
+    public static Answer succes( Object data){
+        return new Answer(StatusOfAnswer.valueOf("SUCCES").getTitle(), data);
+    }
+    public static Answer succes(){
+        return new Answer(StatusOfAnswer.valueOf("SUCCES").getTitle());
+    }
+
+    public static Answer fail(String message){
+        return new Answer(StatusOfAnswer.valueOf("FAIL").getTitle(), message);
+    }
+
+    public enum StatusOfAnswer{
+        SUCCES ("Succes"),
+        FAIL("Fail");
+
+        private String title;
+        StatusOfAnswer(String title) {
+            this.title = title;
+        }
+
+        public String getTitle(){
+            return title;
+        }
     }
 }
