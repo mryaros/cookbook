@@ -68,9 +68,8 @@ public class PersonService {
     }
 
     public boolean isExists(int id){
-        if (persons.containsKey(id))
-            return true;
-        return false;
+        return (persons.get(id) == null);
+
     }
 
     public boolean checkLoginPassword(String login, String password){

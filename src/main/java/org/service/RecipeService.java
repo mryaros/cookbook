@@ -65,7 +65,7 @@ public class RecipeService {
         return recipes.get(id);
     }
     public boolean isExists(int id){
-        return recipes.containsKey(id);
+        return (recipes.get(id) == null);
     }
     public void updateRating(int recipeId, int personID, int like){
         getRecipeById(recipeId).setRating(personID, like);
