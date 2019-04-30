@@ -7,26 +7,26 @@ import javax.ws.rs.core.Response;
 
 @ApiModel("Answer Class")
 public class Answer {
-    private final String status;
+    private final StatusOfAnswer status;
     private final String message;
     private final Object data;
 
-    public Answer(String status){
+    public Answer(StatusOfAnswer status){
         this(status, "", null);
     }
-    public Answer(String status, Object data){
+    public Answer(StatusOfAnswer status, Object data){
         this(status, "", data);
     }
-    public Answer(String status, String message){
+    public Answer(StatusOfAnswer status, String message){
         this(status, message, null);
     }
-    public Answer (String status, String message, Object data){
+    public Answer (StatusOfAnswer status, String message, Object data){
         this.status = status;
         this.message = message;
         this.data = data;
     }
     @ApiModelProperty(value = "Status of response", example = "Succes")
-    public String getStatus(){
+    public StatusOfAnswer getStatus(){
         return status;
     }
 
@@ -41,14 +41,14 @@ public class Answer {
     }
 
     public static Answer succes( Object data){
-        return new Answer(StatusOfAnswer.valueOf("SUCCES").getTitle(), data);
+        return new Answer(StatusOfAnswer.SUCCES, data);
     }
     public static Answer succes(){
-        return new Answer(StatusOfAnswer.valueOf("SUCCES").getTitle());
+        return new Answer(StatusOfAnswer.SUCCES);
     }
 
     public static Answer fail(String message){
-        return new Answer(StatusOfAnswer.valueOf("FAIL").getTitle(), message);
+        return new Answer(StatusOfAnswer.FAIL, message);
     }
 
     public enum StatusOfAnswer{

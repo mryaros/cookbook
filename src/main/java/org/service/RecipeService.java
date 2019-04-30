@@ -4,6 +4,7 @@ import org.domains.Category;
 import org.domains.Ingredient;
 import org.domains.Recipe;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +23,7 @@ public class RecipeService {
     }
 
 
-    public void addRecipe(String name, String category, ArrayList<String> ingredientsName, //названия ингредиентов
+    public void addRecipe(String name, String category, List<String> ingredientsName, //названия ингредиентов
                           String description, ArrayList<String> algorithm, String login){
         int id = idSingle.addAndGet(1);
 
@@ -70,6 +71,17 @@ public class RecipeService {
     public void updateRating(int recipeId, int personID, int like){
         getRecipeById(recipeId).setRating(personID, like);
     }
+    public void doLikeOrDislike(int id, HttpHeaders httpHeaders, boolean type){
+        int value;
+        if (type) value = 1;
+        else value = (-1);
+        List<String> login = httpHeaders.getRequestHeader("Session");
+        String encodedLogin = login.get(0);
+        if (getRecipeById(id).getRating().get(PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId()) == value)
+            updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 0);
+        else updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), value);
+
+    }
 
     public ArrayList<Recipe> search(String name, String category, List<String> ingredients, String login){
         ArrayList<Recipe>  searchRecipe = getRecipes();
@@ -82,7 +94,7 @@ public class RecipeService {
 
     }
 
-    public ArrayList<Recipe> findByName(ArrayList<Recipe> r, String name){
+    public ArrayList<Recipe> findByName(List<Recipe> r, String name){
         ArrayList<Recipe> recipesName = new ArrayList<Recipe>();
 
         for (Recipe recipe : r){
@@ -92,7 +104,7 @@ public class RecipeService {
 
         return recipesName;
     }
-    public ArrayList<Recipe> findByAuthor(ArrayList<Recipe> r, String login){
+    public ArrayList<Recipe> findByAuthor(List<Recipe> r, String login){
         ArrayList<Recipe> recipesAuthor = new ArrayList<Recipe>();
 
         for (Recipe recipe : r) {
@@ -102,7 +114,7 @@ public class RecipeService {
 
         return recipesAuthor;
     }
-    public ArrayList<Recipe> findByCategory(ArrayList<Recipe> r, String name){
+    public ArrayList<Recipe> findByCategory(List<Recipe> r, String name){
         ArrayList<Recipe> recipesCategoty = new ArrayList<Recipe>();
 
         for (Recipe recipe : r){
@@ -112,7 +124,7 @@ public class RecipeService {
 
         return recipesCategoty;
     }
-    public ArrayList<Recipe> findByIngredients(ArrayList<Recipe> r, List<String> name){
+    public ArrayList<Recipe> findByIngredients(List<Recipe> r, List<String> name){
         ArrayList<Recipe> recipesIngredient = new ArrayList<Recipe>();
 
         ArrayList<String> nameOfIngredient = new ArrayList<String>();

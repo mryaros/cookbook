@@ -26,8 +26,20 @@ public class SessionService {
         sessions.put(toBase64(login), PersonService.getInstance().getPerson(login));
     }
 
+    public String getKeyFromValue(Person person){
+        for (String str : sessions.keySet()){
+            if(sessions.get(str).equals(person))
+                return str;
+        }
+        return null;
+    }
+
     public String getSession(String login){
-        return new String(Base64.encode((login).getBytes()));
+        Person per = PersonService.getInstance().getPerson(login);
+        for(Person person : sessions.values()){
+            if(per.equals(person)) return getKeyFromValue(person);
+        }
+        return null;
     }
 
     public void deleteSession(String login){

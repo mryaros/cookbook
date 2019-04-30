@@ -52,11 +52,10 @@ public class PersonsHandler {
     @PermitAll
     @ApiOperation(value = "User authorization")
     public Answer personAuthorization(Map<String, String> map){
-        Map.Entry<String, String> entry = map.entrySet().iterator().next();
-        if (PersonService.getInstance().checkLoginPassword(entry.getKey(), entry.getValue())){
-            SessionService.getInstance().addSession(entry.getKey());
+        if (PersonService.getInstance().checkLoginPassword(map.get("login"), map.get("password"))){
+            SessionService.getInstance().addSession(map.get("login"));
             //return Answer.succes (SessionService.getInstance().toBase64(list.get(0)));
-            return Answer.succes(SessionService.getInstance().getSession(entry.getKey()));
+            return Answer.succes(SessionService.getInstance().getSession(map.get("login")));
         } else {
             return Answer.fail("check your login or password");
             //return Response.seeOther(URI.create("/authorization")).build();

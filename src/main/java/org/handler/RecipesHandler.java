@@ -62,11 +62,7 @@ public class RecipesHandler {
         if(RecipeService.getInstance().getRecipeById(id)==null){
             return Answer.fail("There is no recipe with this ID");
         }
-        List<String> login = httpHeaders.getRequestHeader("Session");
-        String encodedLogin = login.get(0);
-        if (RecipeService.getInstance().getRecipeById(id).getRating().get(PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId()) == 1)
-            RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 0);
-        else RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 1);
+        RecipeService.getInstance().doLikeOrDislike(id, httpHeaders, true);
         return Answer.succes();
     }
 
@@ -77,11 +73,7 @@ public class RecipesHandler {
         if(RecipeService.getInstance().isExists(id)){
             return Answer.fail("There is no recipe with this ID");
         }
-        List<String> login = httpHeaders.getRequestHeader("Session");
-        String encodedLogin = login.get(0);
-        if (RecipeService.getInstance().getRecipeById(id).getRating().get(PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId()) == -1)
-            RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), 0);
-        else RecipeService.getInstance().updateRating(id, PersonService.getInstance().getPerson(SessionService.getInstance().decodeBase64(encodedLogin)).getId(), -1);
+        RecipeService.getInstance().doLikeOrDislike(id, httpHeaders, false);
         return Answer.succes();
     }
 

@@ -83,4 +83,20 @@ public class Person {
 
     public void setId(int id){this.id = id;}
 
+    public boolean equals(Object obj){
+        if(obj == this)
+            return true;
+
+        if(obj == null)
+            return false;
+
+        if (!(getClass() == obj.getClass()))
+            return false;
+        else {
+            Person per = (Person)obj;
+            if(per.id == this.id && per.login.equals(this.login) && per.name.equals(this.name) && per.password.equals(this.password) && per.role.equals(this.role) && per.surname.equals(this.surname))
+                return true;
+            else return false;
+        }
+    }
 }
