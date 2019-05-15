@@ -36,6 +36,8 @@ class Description extends React.Component{
                     {algorithm}
                 </ul>
                 <ul>Ингредиенты: {ingredients}</ul>
+                <button onClick={()=> alert("Еще ничего нет")}>Обновить рецепт</button>
+                <button onClick={()=> alert("Еще ничего нет")}>Удалить рецепт</button>
             </div>
         );
     }
@@ -58,16 +60,20 @@ class MyRecipesLink extends React.Component{
         let j = 1;
 
 
-        this.props.recipes.forEach((recipe)=>{
-             recipesName.push(<p><a href = "#" onClick={() => this.setState({i: j})}> {recipe.name}</a></p>);
-        });
+        // this.props.recipes.forEach((recipe)=>{
+        //      recipesName.push(<p><a href = "#" onClick={() => this.setState({i: j})}> {recipe.name}</a></p>);
+        // });
+
+        recipesName.push(<p><a href = "#" onClick={() => this.setState({i: 0})}> {this.props.recipes[0].name}</a></p>);
+        recipesName.push(<p><a href = "#" onClick={() => this.setState({i: 1})}> {this.props.recipes[1].name}</a></p>);
+        recipesName.push(<p><a href = "#" onClick={() => this.setState({i: 2})}> {this.props.recipes[2].name}</a></p>);
 
 
         return(
             <div>
-                {recipesName}
-                <p>
-                    <button>Добавить новый рецепт</button></p>
+                <div style={{float: "left", height: "300px"}}>{recipesName}
+                <p><button onClick={()=> alert("Еще ничего нет")}>Добавить новый рецепт</button></p>
+                </div>
                 {recipeDescription}
             </div>
         );
