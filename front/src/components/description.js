@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {styles} from './styles/stylesForDescription'
+
 export default class Description extends React.Component{
     render() {
         const recipe = this.props.idRecipe;
@@ -14,14 +16,14 @@ export default class Description extends React.Component{
         });
 
         return(
-            <div>
+            <div style={styles.divStyles}>
                 <p>Название рецепта: {recipe.name}</p>
                 <p>Категория: {recipe.category.name}</p>
                 <p>Описание: {recipe.description}</p>
-                <ul>    Алгоритм:
+                <ol style={styles.olStyles}>    Алгоритм:
                     {algorithm}
-                </ul>
-                <ul>Ингредиенты: {ingredients}</ul>
+                </ol>
+                <ol style={styles.olStyles}>Ингредиенты: {ingredients}</ol>
                 <button onClick={()=> alert("Еще ничего нет")}>Обновить рецепт</button>
                 <button onClick={()=> alert("Еще ничего нет")}>Удалить рецепт</button>
             </div>

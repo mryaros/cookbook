@@ -1,7 +1,7 @@
 import Description from './description';
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import styles from './styleForMyRecipesLink.css';
+import {styles} from './styles/stylesForMyRecipeLink';
 
 export default class MyRecipesLink extends React.Component{
     constructor(props){
@@ -21,7 +21,7 @@ export default class MyRecipesLink extends React.Component{
 
 
         this.props.recipes.forEach((recipe)=>{
-            recipesName.push(<li key={recipe.id}><a href = "#" onClick={() => this.setState({recipeId: recipe.id})}> {recipe.name}</a></li>);
+            recipesName.push(<li key={recipe.id} style={styles.liStyle}><a style={styles.aStyle} href = "#" onClick={() => this.setState({recipeId: recipe.id})}> <div style={styles.liDivStyle}>{recipe.name}</div></a></li>);
         });
 
         // recipesName.push(<li key={this.props.recipes[0].id}><a href = "#" onClick={() => this.setState({recipeId: this.props.recipes[0].id})}> {this.props.recipes[0].name}</a></li>);
@@ -32,11 +32,10 @@ export default class MyRecipesLink extends React.Component{
         return(
             <div>
                 {/*<div class="${styles.recipesLink}">*/}
-                    <div style={{float: "left",
-                        height: "300px"}}>
-                    <ul>
+                    <div style={styles.bigDivStyle}>
+                    <ol style={styles.olStyle}>
                         {recipesName}
-                    </ul>
+                    </ol>
                     <p><button onClick={()=> alert("Еще ничего нет")}>Добавить новый рецепт</button></p>
                 </div>
                 {recipeDescription}
