@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MyRecipesLinkAndDescription from './components/myRecipesLinkAndDescription';
+import Person from './components/person'
 
+// import './components/styles'
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Your routes.js file
+import routes from './routes';
+// import "./components/style.css";
 // class Menu extends React.Component {
 //     render() {
 //         return(
@@ -14,7 +21,7 @@ import MyRecipesLinkAndDescription from './components/myRecipesLinkAndDescriptio
 //         );
 //     }
 // }
-//
+
 // class Description extends React.Component{
 //     render() {
 //         const recipe = this.props.idRecipe;
@@ -170,9 +177,34 @@ const RECIPES = [
     }
 ];
 
+const PERSON =
+    {
+        message: "",
+        data: {
+            name: "Katia",
+            id: 1,
+            surname: "Leiberova",
+            login: "leiberova",
+            role: "USER"
+        },
+        status: "SUCCES"
+    }
+;
+
+
+// ReactDOM.render(
+//     routes,
+// document.getElementById('app')
+// );
+
+// ReactDOM.render(
+//     <MyRecipesLinkAndDescription recipes={RECIPES}/>,
+//     document.getElementById('app')
+// );
+
 ReactDOM.render(
-<MyRecipesLinkAndDescription recipes={RECIPES}/>,
-document.getElementById('app')
+    <Person person={PERSON.data}/>,
+    document.getElementById('app')
 );
 
 module.hot.accept();

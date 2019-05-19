@@ -1,0 +1,69 @@
+.olStyles  {
+    margin-left: 0;
+    list-style: none;
+    counter-reset: li;
+    font-family: calibri;
+}
+
+.divStyles  {
+    border: solid 2px black;
+    flex: 2 1 120px;
+    display: flex;
+    flex-direction: column;
+    /*marginLeft: 500px;*/
+    /*marginRight: 1234px;*/
+}
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.list {
+    padding: 10px 0;
+    position: relative;
+    margin-bottom: 0.5em;
+    padding-left: 0.5em;
+    background: #E1F1FF;
+    font-family: 'Josefin Sans', sans-serif;
+}
+.list:before {
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1.5em;
+    width: 1.875em;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    background: #FC7574;
+    border-bottom-left-radius: 70em;
+    border-top-left-radius: 70em;
+    counter-increment: li;
+    content: counter(li);
+}
+
+.h2 {
+    margin: 0em 0 0.5em 0;
+    color: #148773;
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: bold;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+a.button7 {
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    padding: .8em 1em calc(.8em + 3px);
+    border-radius: 3px;
+    background: rgb(64,199,129);
+    box-shadow: 0 -3px rgb(53,167,110) inset;
+    transition: 0.2s;
+}
+a.button7:hover { background: rgb(53, 167, 110); }
+a.button7:active {
+    background: rgb(33,147,90);
+    box-shadow: 0 3px rgb(33,147,90) inset;
+}

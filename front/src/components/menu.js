@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './styles/stylesForMenu.css'
 
-  import {styles} from './styles/stylesForMenu.js'
 
 export default class Menu extends React.Component {
     render() {
         return(
-            <ul style={styles.ulStyle}>
-                <li style={styles.liStyle}>Мой аккаунт</li>
-                <li style={styles.liStyle}>Мои рецепты</li>
-                <li style={styles.liStyle}>Все рецепты</li>
-                <li style={styles.liStyle}>Поиск</li>
+
+            <ul className={"ulStyle"}>
+                <li className={"liStyle"}><a href={"#"} className={"menu"}>Мой аккаунт</a></li>
+                <li className={"liStyle"}><a href={"#"} className={"menu"}>Мои рецепты</a></li>
+                <li className={"liStyle"}><a href={"#"} className={"menu"}>Все рецепты</a></li>
+                <li className={"liStyle"}><a href={"#"} className={"menu"}>Поиск</a></li>
             </ul>
         );
     }

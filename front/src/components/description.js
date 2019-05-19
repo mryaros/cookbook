@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {styles} from './styles/stylesForDescription'
+import './styles/stylesForDescription.css'
 
 export default class Description extends React.Component{
     render() {
@@ -9,23 +9,25 @@ export default class Description extends React.Component{
         const ingredients = [];
 
         recipe.algorithm.forEach((item)=>{
-            algorithm.push(<li key = {item.toString()}>{item}</li>)
+            algorithm.push(<li className={"list"} key = {item.toString()}>{item}</li>)
         });
         recipe.ingredients.forEach((ingredient)=>{
-            ingredients.push(<li key = {ingredient.name.toString()}>{ingredient.name}</li>)
+            ingredients.push(<li className={"list"} key = {ingredient.name.toString()}>{ingredient.name}</li>)
         });
 
         return(
-            <div style={styles.divStyles}>
-                <p>Название рецепта: {recipe.name}</p>
-                <p>Категория: {recipe.category.name}</p>
-                <p>Описание: {recipe.description}</p>
-                <ol style={styles.olStyles}>    Алгоритм:
+            <div className={"divStyles"}>
+                <p className={"h2"}>Название рецепта: {recipe.name}</p>
+                <p className={"h2"}>Категория: {recipe.category.name}</p>
+                <p className={"h2"}>Описание: {recipe.description}</p>
+                <ol className={"olStyles"}>    <p className={"h2"}>Алгоритм:</p>
                     {algorithm}
                 </ol>
-                <ol style={styles.olStyles}>Ингредиенты: {ingredients}</ol>
-                <button onClick={()=> alert("Еще ничего нет")}>Обновить рецепт</button>
-                <button onClick={()=> alert("Еще ничего нет")}>Удалить рецепт</button>
+                <ol className={"olStyles"}><p className={"h2"}>Ингредиенты: </p>{ingredients}</ol>
+                <div className={"buttons"}>
+                    <a href="#" className="button7">обновить</a>
+                    <a href="#" className="button7">удалить</a>
+                </div>
             </div>
         );
     }

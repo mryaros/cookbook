@@ -1,0 +1,47 @@
+.bigDivStyle {
+    /*float: left;*/
+    /*height: 350px;*/
+    border-color: red;
+    border-style: solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1 1 120px;
+}
+
+.button {
+    align-self: center;
+}
+
+.olRecipe {
+    list-style-type: none
+}
+
+.liRecipe {
+    background-color : orange;
+    margin: 5px
+}
+
+.aStyle {
+    color: green;
+    text-decoration: none
+}
+
+.liDivStyle {
+    text-align: center
+}
+.zebra {
+    list-style: none;
+    border-left: 10px solid #FC7574;
+    padding: 0;
+    font-family: "Lucida Sans";
+}
+.zebra li {padding: 10px;}
+.zebra li:nth-child(odd) {background: #E1F1FF;}
+.zebra li:nth-child(even) {background: white;}
+.zebra li a {text-align: center}
+.recipes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
