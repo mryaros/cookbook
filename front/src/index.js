@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MyRecipesLinkAndDescription from './components/myRecipesLinkAndDescription';
-import Person from './components/person'
+import Person from './components/person';
+import AllRecipes from './components/allRecipes'
 
 import { BrowserRouter as Router, Route, Link, HashRouter } from "react-router-dom";
 
@@ -207,6 +208,7 @@ ReactDOM.render(
     <Router >
         <Route path="/" exact component={MyRecipesLinkAndDescription} />
         <Route path="/person" component={Person} />
+        <Route path="/allrecipes" component={AllRecipes} />
     </Router>,
     document.getElementById('app')
 );

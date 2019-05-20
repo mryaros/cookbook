@@ -24,9 +24,9 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
+    "history": "latest",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "latest",
-    "history": "latest"
+    "react-router-dom": "^5.0.0"
   }
 }
