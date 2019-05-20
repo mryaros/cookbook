@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import MyRecipesLinkAndDescription from './components/myRecipesLinkAndDescription';
 import Person from './components/person'
 
+import { BrowserRouter as Router, Route, Link, HashRouter } from "react-router-dom";
+
+
+
 // import './components/styles'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Your routes.js file
-import routes from './routes';
+// import routes from './routes';
 // import "./components/style.css";
 // class Menu extends React.Component {
 //     render() {
@@ -193,18 +197,27 @@ const PERSON =
 
 
 // ReactDOM.render(
-//     routes,
+//     <HashRouter hashType={"noslash"}>
+//         <Route path="/" exact component={MyRecipesLinkAndDescription} />
+//         <Route path="/person" component={Person} />
+//     </HashRouter>,
 // document.getElementById('app')
 // );
-
+ReactDOM.render(
+    <Router >
+        <Route path="/" exact component={MyRecipesLinkAndDescription} />
+        <Route path="/person" component={Person} />
+    </Router>,
+    document.getElementById('app')
+);
 // ReactDOM.render(
 //     <MyRecipesLinkAndDescription recipes={RECIPES}/>,
 //     document.getElementById('app')
 // );
-
-ReactDOM.render(
-    <Person person={PERSON.data}/>,
-    document.getElementById('app')
-);
+//
+// ReactDOM.render(
+//     <Person person={PERSON.data}/>,
+//     document.getElementById('app')
+// );
 
 module.hot.accept();
