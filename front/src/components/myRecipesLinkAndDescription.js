@@ -6,7 +6,7 @@ import './styles/stylesForMyRecLADesc.css'
 export default class MyRecipesLinkAndDescription extends React.Component {
 
     render() {
-        const RECIPES = [
+        let RECIPES = [
             {
                 name: "omlet",
                 id: 0,

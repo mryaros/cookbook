@@ -3,13 +3,33 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/stylesForMyRecipeLink.css';
 
-export default class MyRecipesLink extends React.Component{
+export default class MyRecipesLink extends React.Component {
     constructor(props){
         super(props);
+        this.EMPYRECIPE = {
+            name: "Рецепт",
+            id: this.props.recipes.length,
+            algorithm: [
+                ""
+            ],
+            description: "",
+            ingredients: [
+                {
+                    name: ""
+                }
+            ],
+            category: {
+                name: ""
+            }
+        };
+
+
         // this.recipeClick = this.recipeClick.bind(this);
         this.state = {
-            recipeId: 0
+            recipeId: 0,
+            selectedReceipt:this.props.recipes[0]
         };
+        this.checkAlg();
     }
 
     // componentDidMount() {
@@ -37,13 +57,80 @@ export default class MyRecipesLink extends React.Component{
     //     this.setState({recipeId: 1});
     // }
 
-    render() {
 
-        let recipeDescription = <Description idRecipe={this.props.recipes[this.state.recipeId]}/>;
+
+    checkAlg(){
+        let alg = this.state.selectedReceipt.algorithm;
+        let temp = this.state.selectedReceipt;
+        if (alg[alg.length-1].length!=0) {
+            temp.algorithm.push('')
+            this.setState({selectedReceipt:temp});
+        }
+    }
+
+    render() {
+        const EMPTYRECIPE = {
+            name: "Рецепт",
+            id: this.props.recipes.length,
+            algorithm: [
+                ""
+            ],
+            description: "",
+            ingredients: [
+                {
+                    name: ""
+                }
+            ],
+            category: {
+                name: ""
+            }
+        }
+        let recipeDescription = <Description
+            // idRecipe={this.props.recipes[this.state.recipeId]}
+            idRecipe={this.state.selectedReceipt}
+            onDescChange ={(pole, value)  => {
+                console.log(value);
+                let temp = this.state.selectedReceipt;
+                switch (pole) {
+                    case ("name"):temp.name = value; break;
+                    case ("category"):temp.category.name = value; break;
+                    case ("description"):temp.description = value; break;
+
+                }
+                this.setState({selectedReceipt:temp});
+                // this.props.recipes[this.state.recipeId].recipeName = value
+            }}
+            algorithmChange = {(i, value) => {
+                let temp = this.state.selectedReceipt;
+                temp.algorithm[i] = value;
+                this.setState({selectedReceipt:temp},this.checkAlg);
+
+            }}
+            deleteLiAlgorithm = {(i) => {
+                let temp = this.state.selectedReceipt;
+                temp.algorithm.splice(i, 1);
+                this.setState({selectedReceipt:temp});
+            }}
+            ingredientChange = {(i, value) =>{
+                let temp = this.state.selectedReceipt;
+                temp.ingredients[i].name = value;
+                this.setState({selectedReceipt:temp});
+            }}
+            deleteLiIngredient = {(i) => {
+                let temp = this.state.selectedReceipt;
+                temp.ingredients.splice(i, 1);
+                this.setState({selectedReceipt:temp});
+            }}
+
+        />;
         const recipesName = [];
 
         this.props.recipes.forEach((recipe) => {
-            recipesName.push(<li key={recipe.id} ><a href="#" onClick={() => this.setState({recipeId: recipe.id})}><div>{recipe.name}</div></a></li>);
+            recipesName.push(<li key={recipe.id} ><a href="#" onClick={() => {
+                 // this.recipeDescription.changeRecipe(recipe);
+                this.setState({recipeId: recipe.id,
+                    selectedReceipt:this.props.recipes[recipe.id]
+                })}}><div>{recipe.name}</div></a></li>);
         });
 
         // items.data.map(item => (
@@ -65,7 +152,16 @@ export default class MyRecipesLink extends React.Component{
                         {recipesName}
                     </ol>
                     <p className={"button"}>
-                        <a href="#" className="button7">добавить</a>
+                        <a href="#" className="button7" onClick={() => {
+                            recipesName.push(<li key={EMPTYRECIPE.id} ><a href="#" onClick={() => {
+                                // this.recipeDescription.changeRecipe(recipe);
+                                this.setState({recipeId: EMPTYRECIPE.id,
+                                    selectedReceipt:EMPTYRECIPE
+                                })}}><div>{EMPTYRECIPE.name}</div></a></li>);
+                            this.setState({recipeId: EMPTYRECIPE.id,
+                                selectedReceipt:EMPTYRECIPE})
+
+                        }}>добавить</a>
                     </p>
                 </div>
                 {recipeDescription}
