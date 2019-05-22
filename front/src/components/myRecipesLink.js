@@ -6,22 +6,22 @@ import './styles/stylesForMyRecipeLink.css';
 export default class MyRecipesLink extends React.Component {
     constructor(props){
         super(props);
-        this.EMPYRECIPE = {
-            name: "Рецепт",
-            id: this.props.recipes.length,
-            algorithm: [
-                ""
-            ],
-            description: "",
-            ingredients: [
-                {
-                    name: ""
-                }
-            ],
-            category: {
-                name: ""
-            }
-        };
+        // this.EMPTYRECIPE = {
+        //     name: "Рецепт",
+        //     id: this.props.recipes.length,
+        //     algorithm: [
+        //         ""
+        //     ],
+        //     description: "",
+        //     ingredients: [
+        //         {
+        //             name: ""
+        //         }
+        //     ],
+        //     category: {
+        //         name: ""
+        //     }
+        // };
 
 
         // this.recipeClick = this.recipeClick.bind(this);
@@ -29,7 +29,8 @@ export default class MyRecipesLink extends React.Component {
             recipeId: 0,
             selectedReceipt:this.props.recipes[0]
         };
-        this.checkAlg();
+        this.checkAlg = this.checkAlg.bind(this);
+        this.checkIng = this.checkIng.bind(this);
     }
 
     // componentDidMount() {
@@ -64,6 +65,15 @@ export default class MyRecipesLink extends React.Component {
         let temp = this.state.selectedReceipt;
         if (alg[alg.length-1].length!=0) {
             temp.algorithm.push('')
+            this.setState({selectedReceipt:temp});
+        }
+    }
+
+    checkIng(){
+        let ing = this.state.selectedReceipt.ingredients;
+        let temp = this.state.selectedReceipt;
+        if (ing[ing.length-1].name.length!=0) {
+            temp.ingredients.push({name: ''})
             this.setState({selectedReceipt:temp});
         }
     }
@@ -114,7 +124,7 @@ export default class MyRecipesLink extends React.Component {
             ingredientChange = {(i, value) =>{
                 let temp = this.state.selectedReceipt;
                 temp.ingredients[i].name = value;
-                this.setState({selectedReceipt:temp});
+                this.setState({selectedReceipt:temp}, this.checkIng);
             }}
             deleteLiIngredient = {(i) => {
                 let temp = this.state.selectedReceipt;
@@ -153,13 +163,9 @@ export default class MyRecipesLink extends React.Component {
                     </ol>
                     <p className={"button"}>
                         <a href="#" className="button7" onClick={() => {
-                            recipesName.push(<li key={EMPTYRECIPE.id} ><a href="#" onClick={() => {
-                                // this.recipeDescription.changeRecipe(recipe);
-                                this.setState({recipeId: EMPTYRECIPE.id,
-                                    selectedReceipt:EMPTYRECIPE
-                                })}}><div>{EMPTYRECIPE.name}</div></a></li>);
                             this.setState({recipeId: EMPTYRECIPE.id,
-                                selectedReceipt:EMPTYRECIPE})
+                                selectedReceipt:EMPTYRECIPE});
+                            this.props.recipes.push(EMPTYRECIPE);
 
                         }}>добавить</a>
                     </p>
