@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import MyRecipesLinkAndDescription from './components/myRecipesLinkAndDescription';
 import Person from './components/person';
 import AllRecipes from './components/allRecipes'
+import AuthorizationWindow from './components/authorizationWindow'
+import RegistrationWindow from './components/registrationWindow'
 
 import { BrowserRouter as Router, Route, Link, HashRouter } from "react-router-dom";
 
@@ -209,6 +211,8 @@ ReactDOM.render(
         <Route path="/" exact component={MyRecipesLinkAndDescription} />
         <Route path="/person" component={Person} />
         <Route path="/allrecipes" component={AllRecipes} />
+        <Route path="/authorization" component={AuthorizationWindow}/>
+        <Route path="/registration" component={RegistrationWindow}/>
     </Router>,
     document.getElementById('app')
 );

@@ -1,7 +1,7 @@
 .divStyle {
     border: solid 1px #ccc;
     width: 700px;
-    height: 800px;
+    /*height: 800px;*/
     margin: 0 auto;
     background-color: #cccccc;
     /*display: flex*/
