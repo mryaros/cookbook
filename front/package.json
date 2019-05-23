@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development --open --hot",
+    "build": "webpack --mode production ",
     "test": "echo \"No test specified\" && exit 0"
   },
   "keywords": [],
@@ -20,7 +21,7 @@
     "react-router": "^5.0.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.1",
+    "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {

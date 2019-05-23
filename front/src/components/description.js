@@ -8,6 +8,7 @@ export default class Description extends React.Component{
         this.state = {
             value: 0,
         };
+        this.componentqwe = this.componentqwe.bind(this);
     }
     checkAlg(){
         let alg = this.state.selectedReceipt.algorithm;
@@ -16,6 +17,30 @@ export default class Description extends React.Component{
             temp.algorithm.push('')
             this.setState({selectedReceipt:temp});
         }
+    }
+
+    componentqwe() {
+        fetch("http://localhost:8080/cookbook_wxploded/pers", {headers: {'Session' : ''}})
+            .then(res => {
+                console.log(res);
+                return res.json()
+            })
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        items: result.items
+                    });
+                },
+                // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+                // чтобы не перехватывать исключения из ошибок в самих компонентах.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
     }
 
     render() {
@@ -72,7 +97,7 @@ export default class Description extends React.Component{
                     {/*}}/></li>*/}
                 </ol>
                 <div className={"buttons"}>
-                    <a href="#" className="button7">обновить</a>
+                    <a href="#" className="button7" onClick={this.componentqwe}>обновить</a>
                     <a href="#" className="button7">удалить</a>
                 </div>
             </div>

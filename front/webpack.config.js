@@ -41,7 +41,8 @@ module.exports = {
     extensions: ['*', '.js', '.jsx']
   },
   output: {
-    path: __dirname + '/dist',
+    // path: __dirname + '/dist',
+    path: __dirname + '/../src/main/webapp',
     publicPath: '/',
     filename: 'bundle.js'
   },
@@ -58,7 +59,8 @@ module.exports = {
 
   devServer: {
     historyApiFallback: true,
-    contentBase: './dist',
+    // contentBase: './dist',
+    contentBase:'../src/main/webapp',
     hot: true
   }
 };

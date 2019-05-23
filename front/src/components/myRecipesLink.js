@@ -54,9 +54,9 @@ export default class MyRecipesLink extends React.Component {
     //         )
     // }
 
-    // recipeClick(q){
-    //     this.setState({recipeId: 1});
-    // }
+    recipeClick(q){
+        this.setState({recipeId: 1});
+    }
 
 
 
