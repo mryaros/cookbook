@@ -20,7 +20,11 @@ export default class Description extends React.Component{
     }
 
     componentqwe() {
-        fetch("http://localhost:8080/cookbook_wxploded/pers", {headers: {'Session' : ''}})
+        fetch("http://localhost:8080/cookbook_war_exploded/server/persons", {
+            method:'GET',
+            mode:'no-cors',
+            headers: {'Session' : ''}
+        })
             .then(res => {
                 console.log(res);
                 return res.json()
