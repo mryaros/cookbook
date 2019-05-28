@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/stylesForDescription.css'
+import './styles/stylesForDescription.css';
+import Request from './request'
 
 export default class Description extends React.Component{
     constructor(props){
@@ -20,34 +21,58 @@ export default class Description extends React.Component{
     }
 
     componentqwe() {
-        fetch("http://localhost:8080/cookbook_war_exploded/server/persons", {
-            method:'GET',
-            mode:'no-cors',
-            headers: {'Session' : ''}
-        })
-            .then(res => {
-                console.log(res);
-                return res.json()
-            })
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        items: result.items
-                    });
-                },
-                // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-                // чтобы не перехватывать исключения из ошибок в самих компонентах.
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
+        var xhr = new XMLHttpRequest();
+
+
+        xhr.open("GET", "http://localhost:8080/cookbook_war_exploded/server/persons", true);
+
+        xhr.send();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState != 4) return;
+
+            // по окончании запроса доступны:
+            // status, statusText
+            // responseText, responseXML (при content-type: text/xml)
+
+            if (this.status != 200) {
+                // обработать ошибку
+                alert( 'ошибка: ' + (this.status ? this.statusText : 'запрос не удался') );
+                return;
+            }
+
+            console.log(this.responseText);
+            // получить результат из this.responseText или this.responseXML
+        }
+        // fetch("http://localhost:8080/cookbook_war_exploded/server/persons", {
+        //     method:'GET',
+        //     mode:'no-cors',
+        //     headers: {'Session' : ''}
+        // })
+        //     .then(res => {
+        //         console.log(res);
+        //         return res.json()
+        //     })
+        //     .then(
+        //         (result) => {
+        //             this.setState({
+        //                 isLoaded: true,
+        //                 items: result.items
+        //             });
+        //         },
+        //         // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        //         // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        //         (error) => {
+        //             this.setState({
+        //                 isLoaded: true,
+        //                 error
+        //             });
+        //         }
+        //     )
     }
 
     render() {
+        let res = null;
         const recipe = this.props.idRecipe;
         const algorithm = [];
         const ingredients = [];
@@ -101,7 +126,9 @@ export default class Description extends React.Component{
                     {/*}}/></li>*/}
                 </ol>
                 <div className={"buttons"}>
-                    <a href="#" className="button7" onClick={this.componentqwe}>обновить</a>
+                    {/*<a href="#" className="button7" onClick={() => Request.requestGet("persons", 'GET', res)}>обновить</a>*/}
+                    <a href="#" className="button7" onClick={() => this.componentqwe()}>обновить</a>
+
                     <a href="#" className="button7">удалить</a>
                 </div>
             </div>

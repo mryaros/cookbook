@@ -2,7 +2,8 @@ import MyRecipesLink from './myRecipesLink';
 import Menu from './menu';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/stylesForMyRecLADesc.css'
+import './styles/stylesForMyRecLADesc.css';
+import Request from './request'
 export default class MyRecipesLinkAndDescription extends React.Component {
     constructor(props){
         super(props);
@@ -77,6 +78,7 @@ export default class MyRecipesLinkAndDescription extends React.Component {
                 }
             }
         ];
+        // this.RECIPES = null;
     }
 
     render() {
@@ -151,6 +153,7 @@ export default class MyRecipesLinkAndDescription extends React.Component {
         //         }
         //     }
         // ];
+        // Request.requestGet("recipes", 'Get', this.RECIPES);
         return (
             <div className={"divStyle"}>
                 <Menu/>
