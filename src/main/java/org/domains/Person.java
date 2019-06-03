@@ -16,6 +16,9 @@ public class Person {
     private int id;
 
     public Person(){}
+    public Person(String name, String surname, String login, String role){
+        this(name, surname, login, "", role, -1);
+    }
     public Person(String name, String surname, String login, String password, String role){
         this(name, surname, login, password, role, -1);
     }

@@ -36,6 +36,8 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
     public void filter(ContainerRequestContext requestContext)
     {
         Method method = resourceInfo.getResourceMethod();
+        if(requestContext.getMethod().equals("OPTIONS"))
+            return;
         //Access allowed for all
         if( ! method.isAnnotationPresent(PermitAll.class))
         {

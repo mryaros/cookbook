@@ -29,8 +29,8 @@ export default class AuthorizationWindow extends React.Component {
                     {/*<div>Логин*: <input type={"text"} id={"loginReg"}/></div>*/}
                     {/*<div>Пароль*: <input type={"password"} id={"passwordReg"}/></div>*/}
                     {/*<div>Повторите пароль*: <input type={"password"}/></div>*/}
-                    {/*<Link to="/authorization" className="button7" onClick={() => {*/}
-                    <button className="button7" onClick={() => {
+                    <Link to="/authorization" className="button7" onClick={() => {
+                    {/*<button className="button7" onClick={() => {*/}
                         // let body = {
                         //     name:"",
                         //     surname:"",
@@ -43,11 +43,11 @@ export default class AuthorizationWindow extends React.Component {
                         // body.login = document.getElementById("login").value;
                         // body.password = document.getElementById("password").value;
                         // body.role = "USER";
-                        let promise = Request.requestPost("persons/registration", 'Post', this.body);
+                        let promise = Request.requestFirstPost("persons/registration", 'Post', this.body);
                         promise.then(result => {
                             console.log(result);
                         }, error =>{ console.log(error)});
-                    }}>зарегистрироваться</button>
+                    }}>зарегистрироваться</Link>
                 </div>
             </div>
         );

@@ -81,7 +81,7 @@ export default class MyRecipesLink extends React.Component {
     render() {
         const EMPTYRECIPE = {
             name: "Рецепт",
-            id: this.props.recipes.length,
+            id: this.props.recipes.length+312,
             algorithm: [
                 ""
             ],

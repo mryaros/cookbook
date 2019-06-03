@@ -55,6 +55,7 @@ public class PersonService {
         return new ArrayList<Person>(persons.values());
     }
     public void updatePerson(int id, Person person){
+        person.setPassword(getPerson(id).getPassword());
         person.setId(id);
         persons.put(id, person);
     }

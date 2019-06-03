@@ -17,6 +17,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.net.Authenticator;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,8 +55,12 @@ public class PersonsHandler {
     public Answer personAuthorization(Map<String, String> map){
         if (PersonService.getInstance().checkLoginPassword(map.get("login"), map.get("password"))){
             SessionService.getInstance().addSession(map.get("login"));
+            HashMap<String, String> hash = new HashMap<>();
+            hash.put("header", SessionService.getInstance().getSession(map.get("login")));
+            hash.put("id", String.valueOf(PersonService.getInstance().getPerson(map.get("login")).getId()));
             //return Answer.succes (SessionService.getInstance().toBase64(list.get(0)));
-            return Answer.succes(SessionService.getInstance().getSession(map.get("login")));
+            return Answer.succes(hash);
+//            return Answer.succes(SessionService.getInstance().getSession(map.get("login")));
         } else {
             return Answer.fail("check your login or password");
             //return Response.seeOther(URI.create("/authorization")).build();
