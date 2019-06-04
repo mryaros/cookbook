@@ -24,13 +24,29 @@ export default class MyRecipesLinkAndDescription extends React.Component {
                     category: {
                         name: ""
                     }
-                },]}
-
-        let promise = Request.requestGet("recipes", 'GET');
-        promise.then(result => {
-            console.log(result);
-            this.setState({RECIPES: result.data});
+                },
+            ]}
+        let login;
+        let promise1 = Request.requestGet("persons/"+localStorage.getItem("userId"), 'Get');
+        promise1.then(result => {
+            if(result.status == "FAIL")
+                window.location.href = '/error?mes='+result.message;
+            login = result.data.login;
+            let promise = Request.requestGet("recipes/search?login="+login, 'GET');
+            promise.then(result => {
+                if(result.status == "FAIL")
+                    window.location.href = '/error?mes='+result.message;
+                if (result.data.length != 0)
+                    this.setState({RECIPES: result.data});
+            }, error =>{ console.log(error)});
         }, error =>{ console.log(error)});
+
+        // let promise = Request.requestGet("recipes/search?login="+login, 'GET');
+        // promise.then(result => {
+        //     if (result.data.length != 0)
+        //         this.setState({RECIPES: result.data});
+        //     console.log(result);
+        // }, error =>{ console.log(error)});
     }
 
     render() {
@@ -110,10 +126,6 @@ export default class MyRecipesLinkAndDescription extends React.Component {
             <div className={"divStyle"}>
                 <Menu/>
                 <MyRecipesLink recipes={this.state.RECIPES}/>
-                {/*<main>*/}
-                    {/*{this.props.children}*/}
-                {/*</main>*/}
-
             </div>
 
         );

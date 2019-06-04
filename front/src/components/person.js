@@ -7,9 +7,10 @@ export default class Person extends React.Component {
     constructor(props){
         super(props);
         this.state = {person: {name:"", surname: "", login:""} }
-        let promise = Request.requestGet("persons/"+User.getInstance().id, 'Get');
+        let promise = Request.requestGet("persons/"+localStorage.getItem("userId"), 'Get');
         promise.then(result => {
-            console.log(result);
+            if(result.status == "FAIL")
+                window.location.href = '/error?mes='+result.message;
             this.setState({person: result.data});
         }, error =>{ console.log(error)});
     }
@@ -42,7 +43,11 @@ export default class Person extends React.Component {
                   <a href="/authorization" className="button7" onClick={() => {let promise = Request.requestGet("persons/"+User.getInstance().id, 'DELETE');
                       promise.then(result => {
                           console.log(result);
+                          localStorage.clear();
                       }, error =>{ console.log(error)});}}>удалить</a>
+                  <a href="/authorization" className="button7" onClick={() => {
+                      localStorage.clear();
+                      }}>выход</a>
               </p>
           </div>
           </div>

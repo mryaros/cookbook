@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/stylesForDescription.css'
 
-export default class Description extends React.Component{
+export default class AllDescription extends React.Component{
     render() {
+
         const recipe = this.props.idRecipe;
         const algorithm = [];
         const ingredients = [];
-
         recipe.algorithm.forEach((item)=>{
             algorithm.push(<li className={"list"} key = {item.toString()}>{item}</li>)
         });

@@ -128,13 +128,39 @@ export default class Description extends React.Component{
                 <div className={"buttons"}>
                     {/*<a href="#" className="button7" onClick={() => Request.requestGet("persons", 'GET', res)}>обновить</a>*/}
                     <a href="#" className="button7" onClick={() => {
-                        let promise = Request.requestPostRecipe("recipes", 'POST', recipe);
+                        let promise;
+                        // console.log(recipe.id.indexOf("new"));
+                        if (typeof recipe.id == "number") {
+                            delete recipe.category.id;
+                            if(recipe.algorithm.length > 1) recipe.algorithm.pop();
+                            if(recipe.ingredients.length > 1) recipe.ingredients.pop();
+                            recipe.ingredients.forEach((ingredient)=>{delete ingredient.id});
+                            console.log(recipe);
+                            promise = Request.requestPostRecipe("recipes/" + recipe.id, 'POST', recipe);
+                        }
+                        else {
+                            recipe.id = 312;
+                            if(recipe.algorithm.length > 1) recipe.algorithm.pop();
+                            if(recipe.ingredients.length > 1) recipe.ingredients.pop();
+                            promise = Request.requestPostRecipe("recipes", 'POST', recipe);
+                        }
                         promise.then(result => {
+                            if(result.status == "FAIL")
+                                window.location.href = '/error?mes='+result.message;
                             console.log(result);
                         }, error =>{ console.log(error)});
+                        window.location.href = '/myrecipes';
                     }}>обновить</a>
 
-                    <a href="#" className="button7">удалить</a>
+                    <a href="#" className="button7"onClick={() => {
+                        let promise = Request.requestGet("recipes/"+recipe.id, 'DELETE');
+                        promise.then(result => {
+                            if(result.status == "FAIL")
+                                window.location.href = '/error?mes='+result.message;
+                            console.log(result);
+                        }, error =>{ console.log(error)});
+                        window.location.href = '/myrecipes';
+                    }}>удалить</a>
                 </div>
             </div>
         );

@@ -23,40 +23,13 @@ export default class MyRecipesLink extends React.Component {
         //     }
         // };
 
-
-        // this.recipeClick = this.recipeClick.bind(this);
         this.state = {
-            recipeId: 0,
             selectedReceipt:this.props.recipes[0]
         };
         this.checkAlg = this.checkAlg.bind(this);
         this.checkIng = this.checkIng.bind(this);
     }
 
-    // componentDidMount() {
-    //     fetch("localhost:8080/recipes", {headers: {'Session' : ''}})
-    //         .then(res => res.json())
-    //         .then(
-    //             (result) => {
-    //                 this.setState({
-    //                     isLoaded: true,
-    //                     items: result.items
-    //                 });
-    //             },
-    //             // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-    //             // чтобы не перехватывать исключения из ошибок в самих компонентах.
-    //             (error) => {
-    //                 this.setState({
-    //                     isLoaded: true,
-    //                     error
-    //                 });
-    //             }
-    //         )
-    // }
-
-    recipeClick(q){
-        this.setState({recipeId: 1});
-    }
 
 
 
@@ -81,7 +54,7 @@ export default class MyRecipesLink extends React.Component {
     render() {
         const EMPTYRECIPE = {
             name: "Рецепт",
-            id: this.props.recipes.length+312,
+            id: "new"+this.props.recipes.length,
             algorithm: [
                 ""
             ],
@@ -99,7 +72,6 @@ export default class MyRecipesLink extends React.Component {
             // idRecipe={this.props.recipes[this.state.recipeId]}
             idRecipe={this.state.selectedReceipt}
             onDescChange ={(pole, value)  => {
-                console.log(value);
                 let temp = this.state.selectedReceipt;
                 switch (pole) {
                     case ("name"):temp.name = value; break;
@@ -108,7 +80,6 @@ export default class MyRecipesLink extends React.Component {
 
                 }
                 this.setState({selectedReceipt:temp});
-                // this.props.recipes[this.state.recipeId].recipeName = value
             }}
             algorithmChange = {(i, value) => {
                 let temp = this.state.selectedReceipt;
@@ -137,22 +108,12 @@ export default class MyRecipesLink extends React.Component {
 
         this.props.recipes.forEach((recipe) => {
             recipesName.push(<li key={recipe.id} ><a href="#" onClick={() => {
-                 // this.recipeDescription.changeRecipe(recipe);
-                this.setState({recipeId: recipe.id,
-                    selectedReceipt:this.props.recipes[recipe.id]
+                let reci;
+                this.props.recipes.forEach((rec)=>{if (recipe.id == rec.id) reci = rec;})
+                this.setState({
+                   selectedReceipt: reci,
                 })}}><div>{recipe.name}</div></a></li>);
         });
-
-        // items.data.map(item => (
-        //     recipesName.push(<li key={item.id} style = {styles.liStyle}><a style={styles.aStyle} href = "#"
-        //                                                                        onClick={() => this.setState({recipeId: item.id})}>
-        //         <div style={styles.liDivStyle}>item.name</div></a></li>)
-        // ))
-
-            // recipesName.push(<li key={this.props.recipes[0].id}><a href = "#" onClick={() => this.setState({recipeId: this.props.recipes[0].id})}> {this.props.recipes[0].name}</a></li>);
-            // recipesName.push(<li key={this.props.recipes[1].id}><a href = "#" onClick={() => this.setState({recipeId: this.props.recipes[1].id})}> {this.props.recipes[1].name}</a></li>);
-            // recipesName.push(<li key={this.props.recipes[2].id}><a href = "#" onClick={() => this.setState({recipeId: this.props.recipes[2].id})}> {this.props.recipes[2].name}</a></li>);
-
 
         return (
             <div className={"recipes"}>
@@ -163,7 +124,7 @@ export default class MyRecipesLink extends React.Component {
                     </ol>
                     <p className={"button"}>
                         <a href="#" className="button7" onClick={() => {
-                            this.setState({recipeId: EMPTYRECIPE.id,
+                            this.setState({
                                 selectedReceipt:EMPTYRECIPE});
                             this.props.recipes.push(EMPTYRECIPE);
 

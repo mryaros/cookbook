@@ -14,6 +14,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.domains.Answer;
 import org.domains.Person;
 import org.glassfish.jersey.internal.util.Base64;
 import org.service.PersonService;
@@ -61,8 +62,10 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             //If no authorization information present; block access
             if(authorization == null || authorization.isEmpty())
             {
-                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("You cannot access this resource, login please").build());
+//                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+//                        .entity("You cannot access this resource, login please").build());
+              requestContext.abortWith(Response.status(Response.Status.OK)
+                      .entity(Answer.fail("You cannot access this resource, login please")).build());
                 return;
             }
 
@@ -72,8 +75,10 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             //If no authorization information present; block access
             if(!SessionService.getInstance().isExists(encodedUserLogin))
             {
-                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("You cannot access this resource, login please").build());
+//                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+//                        .entity("You cannot access this resource, login please").build());
+                requestContext.abortWith(Response.status(Response.Status.OK)
+                        .entity(Answer.fail("You cannot access this resource, login please")).build());
                 return;
             }
 

@@ -46,6 +46,8 @@ export default class AuthorizationWindow extends React.Component {
                         let promise = Request.requestFirstPost("persons/registration", 'Post', this.body);
                         promise.then(result => {
                             console.log(result);
+                            if(result.status == "FAIL")
+                                window.location.href = '/error?mes='+result.message;
                         }, error =>{ console.log(error)});
                     }}>зарегистрироваться</Link>
                 </div>

@@ -27,11 +27,10 @@ export default class AllRecipes extends React.Component {
 
         let promise = Request.requestGet("recipes", 'GET');
         promise.then(result => {
-            console.log(result);
-            console.log(result.data.length !=0);
+            if(result.status == "FAIL")
+                window.location.href = '/error?mes='+result.message;
             if (result.data.length != 0)
-                this.setState({RECIPES: result.data})
-            // this.RECIPES = result.data;
+                this.setState({RECIPES: result.data});
         }, error =>{ console.log(error)});
     }
     render() {
@@ -110,9 +109,6 @@ export default class AllRecipes extends React.Component {
             <div className={"divStyle"}>
                 <Menu/>
                 <AllRecipesLink recipes={this.state.RECIPES}/>
-                {/*<main>*/}
-                {/*{this.props.children}*/}
-                {/*</main>*/}
 
             </div>
 
