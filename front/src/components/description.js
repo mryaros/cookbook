@@ -150,7 +150,7 @@ export default class Description extends React.Component{
                             console.log(result);
                         }, error =>{ console.log(error)});
                         window.location.href = '/myrecipes';
-                    }}>обновить</a>
+                    }}>Сохранить</a>
 
                     <a href="#" className="button7"onClick={() => {
                         let promise = Request.requestGet("recipes/"+recipe.id, 'DELETE');
@@ -160,7 +160,7 @@ export default class Description extends React.Component{
                             console.log(result);
                         }, error =>{ console.log(error)});
                         window.location.href = '/myrecipes';
-                    }}>удалить</a>
+                    }}>Удалить</a>
                 </div>
             </div>
         );

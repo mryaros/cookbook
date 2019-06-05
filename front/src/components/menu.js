@@ -12,7 +12,7 @@ export default class Menu extends React.Component {
                 <li className={"liStyle"}><Link to="person" className={"menu"}>Мой аккаунт</Link></li>
                 <li className={"liStyle"}><Link to="/myrecipes" className={"menu"}>Мои рецепты</Link></li>
                 <li className={"liStyle"}><Link to="allrecipes" className={"menu"}>Все рецепты</Link></li>
-                <li className={"liStyle"}><a href={"#"} className={"menu"}>Поиск</a></li>
+                <li className={"liStyle"}><Link to="search" className={"menu"}>Поиск</Link></li>
             </ul>
         );
     }

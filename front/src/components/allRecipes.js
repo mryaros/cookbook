@@ -29,8 +29,22 @@ export default class AllRecipes extends React.Component {
         promise.then(result => {
             if(result.status == "FAIL")
                 window.location.href = '/error?mes='+result.message;
-            if (result.data.length != 0)
+            console.log(result.data[0])
+            if (result.data.length != 0) {
+                for(let i=0; i<result.data.length; i++){
+                    let promise1 = Request.requestGet("persons/" + result.data[i].authorID, 'GET');
+                    promise1.then(result1 => {
+                        if (result.status == "FAIL")
+                            window.location.href = '/error?mes=' + result1.message;
+                        if (result1.data.length != 0)
+                            result.data[i].authorID= result1.data.login;
+                        // this.setState({RECIPES: result.data});
+                        console.log(result1.data.login);
+                    }, error1 => {
+                        console.log(error1)
+                    });}
                 this.setState({RECIPES: result.data});
+            }
         }, error =>{ console.log(error)});
     }
     render() {
