@@ -6,23 +6,6 @@ import './styles/stylesForMyRecipeLink.css';
 export default class MyRecipesLink extends React.Component {
     constructor(props){
         super(props);
-        // this.EMPTYRECIPE = {
-        //     name: "Рецепт",
-        //     id: this.props.recipes.length,
-        //     algorithm: [
-        //         ""
-        //     ],
-        //     description: "",
-        //     ingredients: [
-        //         {
-        //             name: ""
-        //         }
-        //     ],
-        //     category: {
-        //         name: ""
-        //     }
-        // };
-
         this.state = {
             selectedReceipt:this.props.recipes[0]
         };
@@ -54,7 +37,7 @@ export default class MyRecipesLink extends React.Component {
     render() {
         const EMPTYRECIPE = {
             name: "Рецепт",
-            id: "new"+this.props.recipes.length,
+            id: -this.props.recipes.length,
             algorithm: [
                 ""
             ],
@@ -69,7 +52,7 @@ export default class MyRecipesLink extends React.Component {
             }
         }
         let recipeDescription = <Description
-            // idRecipe={this.props.recipes[this.state.recipeId]}
+            updateRecipes = {this.props.updateRecipes}
             idRecipe={this.state.selectedReceipt}
             onDescChange ={(pole, value)  => {
                 let temp = this.state.selectedReceipt;
@@ -117,7 +100,6 @@ export default class MyRecipesLink extends React.Component {
 
         return (
             <div className={"recipes"}>
-                {/*<div class="${styles.recipesLink}">*/}
                 <div className={"bigDivStyle"}>
                     <ol className={"zebra"}>
                         {recipesName}

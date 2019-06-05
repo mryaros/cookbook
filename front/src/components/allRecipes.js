@@ -7,7 +7,8 @@ import Request from "./newRequest";
 export default class AllRecipes extends React.Component {
     constructor(props){
         super(props);
-        this.state = { RECIPES: [
+        this.state = {
+            recipes: [
                 {
                     name: "",
                     id: 0,
@@ -25,104 +26,32 @@ export default class AllRecipes extends React.Component {
                     }
                 },]}
 
-        let promise = Request.requestGet("recipes", 'GET');
+        let promise = Request.requestGet("recipes");
         promise.then(result => {
             if(result.status == "FAIL")
                 window.location.href = '/error?mes='+result.message;
-            console.log(result.data[0])
             if (result.data.length != 0) {
                 for(let i=0; i<result.data.length; i++){
-                    let promise1 = Request.requestGet("persons/" + result.data[i].authorID, 'GET');
+                    let promise1 = Request.requestGet("persons/" + result.data[i].authorID);
                     promise1.then(result1 => {
                         if (result.status == "FAIL")
                             window.location.href = '/error?mes=' + result1.message;
                         if (result1.data.length != 0)
                             result.data[i].authorID= result1.data.login;
                         // this.setState({RECIPES: result.data});
-                        console.log(result1.data.login);
                     }, error1 => {
                         console.log(error1)
                     });}
-                this.setState({RECIPES: result.data});
+                this.setState({recipes: result.data});
             }
         }, error =>{ console.log(error)});
     }
     render() {
-        // const RECIPES = [
-        //     {
-        //         name: "omlet",
-        //         id: 0,
-        //         algorithm: [
-        //             "1. razbit yaico",
-        //             "2. pozarit xleb c dvyx ctoron",
-        //             "3. dobavit xleb k yaicy"
-        //         ],
-        //         description: "very delishion",
-        //         ingredients: [
-        //             {
-        //                 name: "yaico"
-        //             },
-        //             {
-        //                 name: "xleb"
-        //             },
-        //             {
-        //                 name: "milk"
-        //             }
-        //         ],
-        //         category: {
-        //             name: "breakfast"
-        //         }
-        //     },
-        //     {
-        //         name: "супчик",
-        //         id: 1,
-        //         algorithm: [
-        //             "1. закинуть ингредиенты",
-        //             "2. помешать",
-        //             "3. добавить соль, перец по вкусу"
-        //         ],
-        //         description: "very delishion",
-        //         ingredients: [
-        //             {
-        //                 name: "картошка"
-        //             },
-        //             {
-        //                 name: "моркошка"
-        //             },
-        //             {
-        //                 name: "сельдерейчик"
-        //             }
-        //         ],
-        //         category: {
-        //             name: "обед"
-        //         }
-        //     },
-        //     {
-        //         name: "кашка манка",
-        //         id: 2,
-        //         algorithm: [
-        //             "1. налить молоко",
-        //             "2. сыпануть кашу",
-        //             "3. помешать"
-        //         ],
-        //         description: "very delishion",
-        //         ingredients: [
-        //             {
-        //                 name: "молоко"
-        //             },
-        //             {
-        //                 name: "манка"
-        //             }
-        //         ],
-        //         category: {
-        //             name: "breakfast"
-        //         }
-        //     }
-        // ];
+        console.log("qwe");
         return (
             <div className={"divStyle"}>
                 <Menu/>
-                <AllRecipesLink recipes={this.state.RECIPES}/>
+                <AllRecipesLink recipes={this.state.recipes}/>
 
             </div>
 

@@ -23,27 +23,9 @@ export default class AuthorizationWindow extends React.Component {
                     <div>Фамилия*: <input type={"text"} onChange={(e)=>{this.body.surname = e.target.value}}/></div>
                     <div>Логин*: <input type={"text"} onChange={(e)=>{this.body.login = e.target.value}}/></div>
                     <div>Пароль*: <input type={"password"} onChange={(e)=>{this.body.password = e.target.value}}/></div>
-                    <div>Повторите пароль*: <input type={"password"}/></div>
-                    {/*<div>Имя*: <input type={"text"} id = {"nameReg"}/></div>*/}
-                    {/*<div>Фамилия*: <input type={"text"} id={"surnameReg"}/></div>*/}
-                    {/*<div>Логин*: <input type={"text"} id={"loginReg"}/></div>*/}
-                    {/*<div>Пароль*: <input type={"password"} id={"passwordReg"}/></div>*/}
                     {/*<div>Повторите пароль*: <input type={"password"}/></div>*/}
                     <Link to="/authorization" className="button7" onClick={() => {
-                    {/*<button className="button7" onClick={() => {*/}
-                        // let body = {
-                        //     name:"",
-                        //     surname:"",
-                        //     login:"",
-                        //     password:"",
-                        //     role:""
-                        // };
-                        // body.name = document.getElementById("nameReg").value;
-                        // body.surname = document.getElementById("surnameReg").value;
-                        // body.login = document.getElementById("login").value;
-                        // body.password = document.getElementById("password").value;
-                        // body.role = "USER";
-                        let promise = Request.requestFirstPost("persons/registration", 'Post', this.body);
+                        let promise = Request.requestPost("persons/registration", this.body);
                         promise.then(result => {
                             console.log(result);
                             if(result.status == "FAIL")

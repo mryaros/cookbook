@@ -2,15 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Menu from './menu';
 import AllRecipesLink from './allRecipesLink';
-import {Link} from "react-router-dom";
 import Request from "./newRequest";
-import User from "./singletonUser";
 
 export default class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            RECIPES: [
+            recipes: [
                 {
                     name: "",
                     id: 0,
@@ -38,14 +36,14 @@ export default class Search extends React.Component {
         if (this.state.recipeName!="") url = url+ "name=" +this.state.recipeName;
         if (this.state.authorLogin!="") url = url+ "&login=" +this.state.authorLogin;
         if (this.state.return!="") url = url+ "&category=" +this.state.recipeCategory;
-        let promise = Request.requestGet(url, 'GET');
+        let promise = Request.requestGet(url);
         promise.then(result => {
             console.log(result);
             if(result.status == "FAIL")
                 window.location.href = '/error?mes='+result.message;
             if(result.status == "SUCCES"){
                 for(let i=0; i<result.data.length; i++){
-                    let promise1 = Request.requestGet("persons/" + result.data[i].authorID, 'GET');
+                    let promise1 = Request.requestGet("persons/" + result.data[i].authorID);
                     promise1.then(result1 => {
                         if (result.status == "FAIL")
                             window.location.href = '/error?mes=' + result1.message;
@@ -56,7 +54,7 @@ export default class Search extends React.Component {
                     }, error1 => {
                         console.log(error1)
                     });}
-                this.setState({RECIPES: result.data})
+                this.setState({recipes: result.data})
             }
         }, error => {console.log(error)});
     }
@@ -71,7 +69,7 @@ export default class Search extends React.Component {
                     <p>Категория: <input type="text" value = {this.state.recipeCategory} onChange={(e)=>{this.setState({recipeCategory:e.target.value})}}/></p>
                     <button className="button7" onClick={()=>{this.search();}}>Искать</button>
                 </div>
-                <AllRecipesLink recipes={this.state.RECIPES}/>
+                <AllRecipesLink recipes={this.state.recipes}/>
 
             </div>
         );

@@ -1,7 +1,6 @@
 import React from 'react';
 import './styles/stylesForAuthorization.css'
 import {Link} from "react-router-dom";
-import User from './singletonUser';
 import Request from './newRequest'
 
 export default class AuthorizationWindow extends React.Component {
@@ -9,20 +8,17 @@ export default class AuthorizationWindow extends React.Component {
         super(props);
         this.login = "";
         this.password = "";
-        // this.getSession = this.getSession.bind(this);
     }
     getSession(login, password){
         let person = {
             login: this.login,
             password: this.password
         }
-        let promise = Request.requestFirstPost("persons/authorization", 'POST', person);
+        let promise = Request.requestPost("persons/authorization", person);
         promise.then(result => {
             console.log(result);
             if(result.status == "FAIL")
                 window.location.href = '/error?mes='+result.message;
-            const w = User.getInstance(result.data.id, result.data.header);
-            console.log(w);
             if(result.status == "SUCCES"){
                 localStorage.setItem('session', result.data.header);
                 localStorage.setItem('userId', result.data.id);

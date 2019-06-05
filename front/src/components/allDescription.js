@@ -5,16 +5,17 @@ import Request from "./newRequest";
 
 export default class AllDescription extends React.Component{
     render() {
-
-        const recipe = this.props.idRecipe;
-        let author = "lb";
+        const recipe = this.props.recipe;
         const algorithm = [];
         const ingredients = [];
+        let i = 0;
         recipe.algorithm.forEach((item)=>{
-            algorithm.push(<li className={"list"} key = {item.toString()}>{item}</li>)
+            i++;
+            algorithm.push(<li className={"list"} key = {i}>{item}</li>)
         });
         recipe.ingredients.forEach((ingredient)=>{
-            ingredients.push(<li className={"list"} key = {ingredient.name.toString()}>{ingredient.name}</li>)
+            i++;
+            ingredients.push(<li className={"list"} key = {i}>{ingredient.name}</li>)
         });
         return(
             <div className={"divStyles"}>

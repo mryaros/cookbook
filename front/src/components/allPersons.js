@@ -8,7 +8,7 @@ export default class AllPersons extends React.Component {
         this.state = {
             prom: ""
         }
-        let promise = Request.requestGet("persons", 'Get');
+        let promise = Request.requestGet("persons");
         promise.then(result => {
             if(result.status == "FAIL")
                 window.location.href = '/error?mes='+result.message;
