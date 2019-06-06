@@ -2,6 +2,7 @@ import Description from './allDescription';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/stylesForMyRecipeLink.css';
+import PropTypes from 'prop-types';
 
 export default class AllRecipesLink extends React.Component{
     constructor(props){
@@ -11,8 +12,6 @@ export default class AllRecipesLink extends React.Component{
         };
     }
     render() {
-        console.log(this.props.recipes);
-
         let recipeDescription = <Description recipe={this.state.recipe}/>;
         const recipesName = [];
         this.props.recipes.forEach((recipe) => {
@@ -31,5 +30,8 @@ export default class AllRecipesLink extends React.Component{
         );
 
     }
+}
 
+AllRecipesLink.propTypes = {
+    recipes: PropTypes.array,
 }

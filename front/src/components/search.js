@@ -38,7 +38,6 @@ export default class Search extends React.Component {
         if (this.state.return!="") url = url+ "&category=" +this.state.recipeCategory;
         let promise = Request.requestGet(url);
         promise.then(result => {
-            console.log(result);
             if(result.status == "FAIL")
                 window.location.href = '/error?mes='+result.message;
             if(result.status == "SUCCES"){
@@ -49,8 +48,6 @@ export default class Search extends React.Component {
                             window.location.href = '/error?mes=' + result1.message;
                         if (result1.data.length != 0)
                             result.data[i].authorID= result1.data.login;
-                        // this.setState({RECIPES: result.data});
-                        console.log(result1.data.login);
                     }, error1 => {
                         console.log(error1)
                     });}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/stylesForDescription.css'
+import PropTypes from 'prop-types';
 import Request from "./newRequest";
 
 export default class AllDescription extends React.Component{
@@ -30,4 +31,8 @@ export default class AllDescription extends React.Component{
             </div>
         );
     }
+}
+
+AllDescription.propTypes = {
+    recipe: PropTypes.object,
 }

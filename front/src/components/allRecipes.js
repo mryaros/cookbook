@@ -47,7 +47,6 @@ export default class AllRecipes extends React.Component {
         }, error =>{ console.log(error)});
     }
     render() {
-        console.log("qwe");
         return (
             <div className={"divStyle"}>
                 <Menu/>

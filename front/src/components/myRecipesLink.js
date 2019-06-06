@@ -60,8 +60,10 @@ export default class MyRecipesLink extends React.Component {
             promise.then(result => {
                 if(result.status == "FAIL")
                     window.location.href = '/error?mes='+result.message;
-                if (result.data.length != 0)
+                if (result.data.length != 0) {
                     this.setState({recipes: result.data});
+                    this.setState({selectedReceipt: result.data[0]});
+                }
             }, error =>{ console.log(error)});
         }, error =>{ console.log(error)});
     }
@@ -102,10 +104,10 @@ export default class MyRecipesLink extends React.Component {
             category: {
                 name: ""
             }
-        }
+        };
         let recipeDescription = <Description
             updateRecipes = {this.doRequest}
-            idRecipe={this.state.selectedReceipt}
+            recipe={this.state.selectedReceipt}
             onDescChange ={(pole, value)  => {
                 let temp = this.state.selectedReceipt;
                 switch (pole) {

@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/stylesForDescription.css';
-import Request from './newRequest'
+import Request from './newRequest';
+import PropTypes from 'prop-types';
 
 export default class Description extends React.Component{
     constructor(props){
         super(props);
     }
     render() {
-        const recipe = this.props.idRecipe;
+        const recipe = this.props.recipe;
         const algorithm = [];
         const ingredients = [];
         if(recipe.algorithm[recipe.algorithm.length-1].length!=0){
@@ -94,4 +95,14 @@ export default class Description extends React.Component{
             </div>
         );
     }
+}
+
+Description.propTypes = {
+    recipe: PropTypes.object,
+    deleteLiAlgorithm: PropTypes.func,
+    algorithmChange: PropTypes.func,
+    deleteLiIngredient: PropTypes.func,
+    ingredientChange: PropTypes.func,
+    onDescChange: PropTypes.func,
+    updateRecipes: PropTypes.func,
 }
