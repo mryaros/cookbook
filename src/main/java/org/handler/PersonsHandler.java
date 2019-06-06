@@ -56,6 +56,7 @@ public class PersonsHandler {
         if (PersonService.getInstance().checkLoginPassword(map.get("login"), map.get("password"))){
             SessionService.getInstance().addSession(map.get("login"));
             HashMap<String, String> hash = new HashMap<>();
+            String s = map.get("login");
             hash.put("header", SessionService.getInstance().getSession(map.get("login")));
             hash.put("id", String.valueOf(PersonService.getInstance().getPerson(map.get("login")).getId()));
             //return Answer.succes (SessionService.getInstance().toBase64(list.get(0)));
@@ -86,8 +87,13 @@ public class PersonsHandler {
         if (PersonService.getInstance().isExists(id))
             return Answer.fail("There is no user with this ID");
         if(SessionService.getInstance().isActionAllowed(encodedLogin, id)) {
+            SessionService.getInstance().deleteSession(PersonService.getInstance().getPerson(id).getLogin());
             PersonService.getInstance().updatePerson(id, person);
-            return Answer.succes();
+            SessionService.getInstance().addSession(person.getLogin());
+            HashMap<String, String> hash = new HashMap<>();
+            String s = person.getLogin();
+            hash.put("header", SessionService.getInstance().getSession(person.getLogin()));
+            return Answer.succes(hash);
         }
         return Answer.fail("You can't update this Person");
     }

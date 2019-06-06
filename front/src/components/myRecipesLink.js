@@ -2,17 +2,69 @@ import Description from './description';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/stylesForMyRecipeLink.css';
+import Request from "./newRequest";
 
 export default class MyRecipesLink extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selectedReceipt:this.props.recipes[0]
+            selectedReceipt:
+                {
+                    name: "",
+                    id: 0,
+                    algorithm: [
+                        "",
+                    ],
+                    description: "",
+                    ingredients: [
+                        {
+                            name: ""
+                        }
+                    ],
+                    category: {
+                        name: ""
+                    }
+                },
+            recipes: [
+                {
+                    name: "",
+                    id: 0,
+                    algorithm: [
+                        "",
+                    ],
+                    description: "",
+                    ingredients: [
+                        {
+                            name: ""
+                        }
+                    ],
+                    category: {
+                        name: ""
+                    }
+                },
+            ]
         };
         this.checkAlg = this.checkAlg.bind(this);
         this.checkIng = this.checkIng.bind(this);
+        this.doRequest=this.doRequest.bind(this);
+        this.doRequest();
     }
-
+    doRequest(){
+        let login;
+        let promise1 = Request.requestGet("persons/"+localStorage.getItem("userId"));
+        promise1.then(result => {
+            if(result.status == "FAIL")
+                window.location.href = '/error?mes='+result.message;
+            login = result.data.login;
+            let promise = Request.requestGet("recipes/search?login="+login);
+            promise.then(result => {
+                if(result.status == "FAIL")
+                    window.location.href = '/error?mes='+result.message;
+                if (result.data.length != 0)
+                    this.setState({recipes: result.data});
+            }, error =>{ console.log(error)});
+        }, error =>{ console.log(error)});
+    }
 
 
 
@@ -37,7 +89,7 @@ export default class MyRecipesLink extends React.Component {
     render() {
         const EMPTYRECIPE = {
             name: "Рецепт",
-            id: -this.props.recipes.length,
+            id: -this.state.recipes.length,
             algorithm: [
                 ""
             ],
@@ -52,7 +104,7 @@ export default class MyRecipesLink extends React.Component {
             }
         }
         let recipeDescription = <Description
-            updateRecipes = {this.props.updateRecipes}
+            updateRecipes = {this.doRequest}
             idRecipe={this.state.selectedReceipt}
             onDescChange ={(pole, value)  => {
                 let temp = this.state.selectedReceipt;
@@ -89,10 +141,10 @@ export default class MyRecipesLink extends React.Component {
         />;
         const recipesName = [];
 
-        this.props.recipes.forEach((recipe) => {
+        this.state.recipes.forEach((recipe) => {
             recipesName.push(<li key={recipe.id} ><a href="#" onClick={() => {
                 let reci;
-                this.props.recipes.forEach((rec)=>{if (recipe.id == rec.id) reci = rec;})
+                this.state.recipes.forEach((rec)=>{if (recipe.id == rec.id) reci = rec;})
                 this.setState({
                    selectedReceipt: reci,
                 })}}><div>{recipe.name}</div></a></li>);
@@ -108,7 +160,7 @@ export default class MyRecipesLink extends React.Component {
                         <a href="#" className="button7" onClick={() => {
                             this.setState({
                                 selectedReceipt:EMPTYRECIPE});
-                            this.props.recipes.push(EMPTYRECIPE);
+                            this.state.recipes.push(EMPTYRECIPE);
 
                         }}>добавить</a>
                     </p>
