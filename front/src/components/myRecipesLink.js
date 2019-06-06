@@ -87,7 +87,22 @@ export default class MyRecipesLink extends React.Component {
             this.setState({selectedReceipt:temp});
         }
     }
-
+    // static EMPTYRECIPE = {
+    //     name: "Рецепт",
+    //     id: -this.state.recipes.length,
+    //     algorithm: [
+    //         ""
+    //     ],
+    //     description: "",
+    //     ingredients: [
+    //         {
+    //             name: ""
+    //         }
+    //     ],
+    //     category: {
+    //         name: ""
+    //     }
+    // };
     render() {
         const EMPTYRECIPE = {
             name: "Рецепт",

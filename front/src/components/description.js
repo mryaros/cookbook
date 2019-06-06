@@ -25,7 +25,7 @@ export default class Description extends React.Component{
                 <li className={"list"} key = {i} >
                     <input type="text" value={item} onChange={(e) => {
                   if(e.target.value === ''){
-                     this.props.deleteLiAlgorithm(recipe.algorithm.indexOf(item));
+                     this.props.deleteLiAlgorithm(recipe.algorithm[i]);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                   } else {
                       this.props.algorithmChange(recipe.algorithm.indexOf(item), e.target.value)
                   }
