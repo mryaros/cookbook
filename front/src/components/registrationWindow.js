@@ -27,7 +27,6 @@ export default class AuthorizationWindow extends React.Component {
                     <Link to="/authorization" className="button7" onClick={() => {
                         let promise = Request.requestPost("persons/registration", this.body);
                         promise.then(result => {
-                            console.log(result);
                             if(result.status == "FAIL")
                                 window.location.href = '/error?mes='+result.message;
                         }, error =>{ console.log(error)});

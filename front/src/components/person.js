@@ -25,7 +25,8 @@ export default class Person extends React.Component {
                   <a href="#" className="button7" onClick={() => {
                       let promise = Request.requestPost("persons/"+localStorage.getItem("userId"), this.state.person);
                       promise.then(result => {
-                          console.log(result.data.header);
+                          if(result.status == "FAIL")
+                              window.location.href = '/error?mes='+result.message;
                           localStorage.setItem('session', result.data.header);
                       }, error =>{ console.log(error)});}}>изменить</a>
                   <a href="/authorization" className="button7" onClick={() => {

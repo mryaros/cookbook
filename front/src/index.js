@@ -8,6 +8,7 @@ import RegistrationWindow from './components/registrationWindow'
 import AllPersons from './components/allPersons'
 import Search from './components/search'
 import ErrorMessage from './components/errorMessage'
+import Main from './components/main'
 
 import { BrowserRouter as Router, Route, Link, HashRouter } from "react-router-dom";
 
@@ -21,6 +22,7 @@ ReactDOM.render(
         <Route path="/allpersons" component={AllPersons}/>
         <Route path="/search" component={Search}/>
         <Route path="/error" component={ErrorMessage}/>
+        {/*<Route path="/" component={Main}/>*/}
     </Router>,
     document.getElementById('app')
 );

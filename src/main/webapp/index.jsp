@@ -12,7 +12,7 @@
 </head>
 <body style="background-color: orange">
 <!--<div id="app"></div>-->
-<h1>sqarg</h1>
+<%--<h1>sqarg</h1>--%>
 <div id = "app"></div>
 <script src="./bundle.js"></script>
 </body>

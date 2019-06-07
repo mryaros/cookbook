@@ -49,6 +49,12 @@ public class RecipeService {
     public void deleteRecipe(int id){
         recipes.remove(id);
     }
+    public void deleteAllRecipeByPersonId(int personId){
+        for (Recipe recipe : recipes.values()) {
+            if (recipe.getAuthorID() == personId)
+            recipes.remove(recipe.getId());
+        }
+    }
     public void updateRecipe(int id, Recipe recipe){
         recipe.setId(id);
         recipes.put(id, recipe);

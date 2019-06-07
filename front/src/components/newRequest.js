@@ -12,8 +12,8 @@ export default class Request {
             new Promise((resolve, reject) => {
                     var xhr = new XMLHttpRequest();
 
-                    xhr.open("GET", "http://localhost:8080/cookbook_war_exploded/server/"+url, true);
-
+                    xhr.open("GET", "http://localhost:8080/server/"+url, true);
+                // xhr.open("GET", "http://localhost:8080/cookbook_war_exploded/server/"+url, true);
                     // xhr.setRequestHeader('Session', User.getInstance().session);
                     xhr.setRequestHeader('Session', localStorage.getItem("session"));
 
@@ -44,7 +44,9 @@ export default class Request {
             new Promise((resolve, reject) => {
                     var xhr = new XMLHttpRequest();
 
-                    xhr.open("POST", "http://localhost:8080/cookbook_war_exploded/server/"+url, true);
+                xhr.open("POST", "http://localhost:8080/server/"+url, true);
+
+                // xhr.open("POST", "http://localhost:8080/cookbook_war_exploded/server/"+url, true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     // xhr.setRequestHeader('Session', User.getInstance().session);
                     xhr.setRequestHeader('Session', localStorage.getItem("session"));
@@ -76,8 +78,8 @@ export default class Request {
             new Promise((resolve, reject) => {
                     var xhr = new XMLHttpRequest();
 
-                    xhr.open("DELETE", "http://localhost:8080/cookbook_war_exploded/server/"+url, true);
-
+                    xhr.open("DELETE", "http://localhost:8080/server/"+url, true);
+                // xhr.open("DELETE", "http://localhost:8080/cookbook_war_exploded/server/"+url, true);
                     // xhr.setRequestHeader('Session', User.getInstance().session);
                     xhr.setRequestHeader('Session', localStorage.getItem("session"));
 

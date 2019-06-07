@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.glassfish.jersey.internal.util.Base64;
+import org.service.RecipeService;
 import org.service.SessionService;
 
 @Api(value = "persons", description = "Operation with personsList")
@@ -56,7 +57,6 @@ public class PersonsHandler {
         if (PersonService.getInstance().checkLoginPassword(map.get("login"), map.get("password"))){
             SessionService.getInstance().addSession(map.get("login"));
             HashMap<String, String> hash = new HashMap<>();
-            String s = map.get("login");
             hash.put("header", SessionService.getInstance().getSession(map.get("login")));
             hash.put("id", String.valueOf(PersonService.getInstance().getPerson(map.get("login")).getId()));
             //return Answer.succes (SessionService.getInstance().toBase64(list.get(0)));
@@ -88,10 +88,11 @@ public class PersonsHandler {
             return Answer.fail("There is no user with this ID");
         if(SessionService.getInstance().isActionAllowed(encodedLogin, id)) {
             SessionService.getInstance().deleteSession(PersonService.getInstance().getPerson(id).getLogin());
+            if (PersonService.getInstance().getPerson(person.getLogin()) != null)
+                return Answer.fail("Сорян, но логин занят");
             PersonService.getInstance().updatePerson(id, person);
             SessionService.getInstance().addSession(person.getLogin());
             HashMap<String, String> hash = new HashMap<>();
-            String s = person.getLogin();
             hash.put("header", SessionService.getInstance().getSession(person.getLogin()));
             return Answer.succes(hash);
         }
@@ -107,6 +108,7 @@ public class PersonsHandler {
             return Answer.fail("There is no user with this ID");
         if(SessionService.getInstance().isActionAllowed(encodedLogin, id)) {
             SessionService.getInstance().deleteSession(encodedLogin);
+            RecipeService.getInstance().deleteAllRecipeByPersonId(id);
             PersonService.getInstance().deletePerson(id);
             return Answer.succes();
         }

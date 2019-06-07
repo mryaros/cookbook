@@ -25,16 +25,18 @@ export default class Description extends React.Component{
                 <li className={"list"} key = {i} >
                     <input type="text" value={item} onChange={(e) => {
                   if(e.target.value === ''){
-                     this.props.deleteLiAlgorithm(recipe.algorithm[i]);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                     this.props.deleteLiAlgorithm(recipe.algorithm.indexOf(item));
                   } else {
-                      this.props.algorithmChange(recipe.algorithm.indexOf(item), e.target.value)
+                      this.props.algorithmChange(recipe.algorithm.indexOf(item), e.target.value);
+                      // this.props.algorithmChange(recipe.algorithm[i], e.target.value);
                   }
             }}/>
                 </li>)
         });
+        let j=0;
         recipe.ingredients.forEach((ingredient)=>{
-            i++;
-            ingredients.push(<li className={"list"} key = {i}><input type="text" value={ingredient.name} onChange={(e) => {
+            j++;
+            ingredients.push(<li className={"list"} key = {j}><input type="text" value={ingredient.name} onChange={(e) => {
                 if(e.target.value === ''){
                     // this.setState({value: algorithm.indexOf(document.getElementById(item+"li"))});
                     this.props.deleteLiIngredient(recipe.ingredients.indexOf(ingredient));
